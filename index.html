@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lịch Vạn Niên - Tối Ưu iPhone</title>
     <style>
-        :root { --primary: #c62828; --secondary: #1565c0; --bg: #f5f6fa; --success: #2e7d32; }
+        :root { --primary: #c62828; --secondary: #1565c0; --bg: #f5f6fa; --success: #2e7d32; --lunar-special: #fffde7; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
         
-        /* Khung lịch */
         .calendar-box { background: #fff; width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; }
         .header { background: var(--primary); color: white; padding: 18px; text-align: center; }
         .header h2 { margin: 0; font-size: 1.3rem; letter-spacing: 1px; }
 
-        /* Khu vực điều khiển - Tối ưu cho cảm ứng */
         .controls { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; flex-direction: column; gap: 12px; }
         .control-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
         
@@ -33,19 +31,22 @@
         .btn-today { background: var(--secondary); color: white; border: none; flex: 1; font-size: 0.9rem; }
         .btn-leap { background: var(--success); color: white; border: none; flex: 1; font-size: 0.9rem; }
 
-        /* Lưới lịch */
         .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: #f8f9fa; text-align: center; font-weight: bold; font-size: 0.8rem; padding: 12px 0; color: #666; }
         .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
-        .cell { aspect-ratio: 1/1; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .solar { font-size: 1.2rem; font-weight: 600; }
-        .lunar { font-size: 0.75rem; color: #888; margin-top: 3px; }
+        .cell { aspect-ratio: 1/1; border-right: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        
+        /* Hiệu ứng màu nền cho ngày đặc biệt (1 và 15 âm) */
+        .special-bg { background-color: var(--lunar-special) !important; }
+        
+        .solar { font-size: 1.2rem; font-weight: 600; z-index: 2; }
+        .lunar { font-size: 0.75rem; color: #888; margin-top: 3px; z-index: 2; }
         .sun { color: var(--primary); }
         .sat { color: var(--secondary); }
-        .today { background: #fff5f5; outline: 2px solid var(--primary); z-index: 1; border-radius: 4px; }
-        .special-lunar { color: var(--primary); font-weight: bold; }
+        
+        .today { background: #fff5f5; outline: 2px solid var(--primary); z-index: 5; border-radius: 4px; }
+        .special-text { color: var(--primary); font-weight: bold; }
         .empty { background: #fafafa; }
 
-        /* Danh sách năm nhuận */
         .leap-list { display: none; width: 100%; max-width: 450px; background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-top: 15px; }
         .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid #eee; border-radius: 10px; }
         table { width: 100%; border-collapse: collapse; }
@@ -155,14 +156,20 @@ function render() {
     let firstDay = new Date(y, m, 1).getDay();
     let offset = (firstDay === 0) ? 6 : firstDay - 1;
     for (let i = 0; i < offset; i++) grid.innerHTML += '<div class="cell empty"></div>';
+    
     for (let d = 1; d <= new Date(y, m + 1, 0).getDate(); d++) {
         const dateObj = new Date(y, m, d), dow = dateObj.getDay();
         const lun = getLunarDate(d, m + 1, y);
         const isToday = d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear();
+        
+        // Kiểm tra ngày đặc biệt (1 và 15 âm lịch)
+        const isSpecialDay = (lun.ld === 1 || lun.ld === 15);
+        
         let lunarTxt = lun.ld === 1 ? `${lun.ld}/${lun.lm}${lun.isLeap?'n':''}` : lun.ld;
-        grid.innerHTML += `<div class="cell ${isToday?'today':''}">
+        
+        grid.innerHTML += `<div class="cell ${isToday ? 'today' : ''} ${isSpecialDay ? 'special-bg' : ''}">
             <div class="solar ${dow==0?'sun':(dow==6?'sat':'')}">${d}</div>
-            <div class="lunar ${lun.ld==1||lun.ld==15?'special-lunar':''}">${lunarTxt}</div>
+            <div class="lunar ${lun.ld==1||lun.ld==15?'special-text':''}">${lunarTxt}</div>
         </div>`;
     }
 }
