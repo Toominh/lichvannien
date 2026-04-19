@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lịch Vạn Niên - Dark Mode Interactive</title>
+    <title>Lịch Vạn Niên Pro - Đa Kỷ Niệm</title>
     <style>
         :root {
             --primary: #ef5350;
@@ -20,109 +20,133 @@
             --today-bg: #3a1c1c;
             --grid-header-bg: #252525;
             --selected-bg: #1565c0;
+            
+            /* Màu sắc theo yêu cầu */
+            --color-solar: #00e5ff;   /* Cyan */
+            --color-lunar: #ff4081;   /* Pink */
+            --color-birthday: #ffeb3b; /* Yellow */
+            --color-tet: #ff9800;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg); 
-            color: var(--text-main);
+            background: var(--bg); color: var(--text-main);
             display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; 
         }
         
-        .calendar-box { 
-            background: var(--box-bg); 
-            width: 100%; max-width: 450px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
-            overflow: hidden; 
-        }
+        .calendar-box { background: var(--box-bg); width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
 
-        /* Phần hiển thị Thông tin ngày chọn */
-        .today-banner {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 25px 20px;
-            text-align: center;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
+        .today-banner { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 20px; text-align: center; position: relative; }
         .today-dow { font-size: 1.2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .today-solar { font-size: 4.5rem; font-weight: 800; line-height: 1; margin: 5px 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.2); }
         .today-my { font-size: 1.1rem; font-weight: 500; margin-bottom: 12px; opacity: 0.9;}
-        .today-lunar { 
-            font-size: 1.1rem; 
-            background: rgba(255,255,255,0.25); 
-            padding: 6px 18px; 
-            border-radius: 20px; 
-            display: inline-block; 
-            font-weight: bold; 
-            backdrop-filter: blur(5px); 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .today-canchi {
-            font-size: 0.95rem;
-            margin-top: 12px;
-            opacity: 0.9;
-            font-weight: 500;
-        }
+        .today-lunar { font-size: 1.1rem; background: rgba(255,255,255,0.25); padding: 6px 18px; border-radius: 20px; display: inline-block; font-weight: bold; backdrop-filter: blur(5px); }
+        .today-canchi { font-size: 0.95rem; margin-top: 12px; opacity: 0.9; font-weight: 500; line-height: 1.4; }
+        
+        /* Container cho nhiều ngày lễ */
+        .holiday-container { margin-top: 15px; display: flex; flex-direction: column; gap: 5px; align-items: center; }
+        .holiday-item { font-size: 0.95rem; font-weight: bold; text-transform: uppercase; padding: 2px 10px; border-radius: 4px; background: rgba(0,0,0,0.2); }
+        
+        .txt-solar { color: var(--color-solar) !important; }
+        .txt-lunar { color: var(--color-lunar) !important; }
+        .txt-birthday { color: var(--color-birthday) !important; }
 
         .header { background: var(--box-bg); color: var(--primary); padding: 15px; text-align: center; border-bottom: 1px solid var(--border-color); }
-        .header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 1px; }
+        .header h2 { margin: 0; font-size: 1.2rem; }
 
         .controls { padding: 15px; background: var(--box-bg); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px; }
         .control-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
-        
-        select, input { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; text-align: center; background: var(--input-bg); color: var(--text-main); }
+        select, input { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: var(--text-main); text-align: center; }
         input[type="number"] { width: 80px; font-weight: bold; color: var(--primary); }
-        
-        button { 
-            padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); 
-            background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; font-size: 1.1rem;
-            min-width: 45px; transition: background 0.2s;
-        }
-        button:active { background: var(--input-bg); }
+        button { padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--box-bg); color: var(--text-main); cursor: pointer; font-weight: bold; transition: 0.2s; }
+        button:active { opacity: 0.6; }
         .btn-nav { color: var(--primary); border-color: var(--primary); }
         
-        .action-group { display: flex; width: 100%; gap: 10px; }
-        .btn-today { background: var(--secondary); color: white; border: none; flex: 1; font-size: 0.9rem; }
-        .btn-leap { background: var(--success); color: white; border: none; flex: 1; font-size: 0.9rem; }
+        .action-group { display: flex; width: 100%; gap: 8px; }
+        .btn-today { background: var(--secondary); color: white; border: none; flex: 1.2; font-size: 0.85rem; }
+        .btn-tet { background: var(--color-tet); color: white; border: none; flex: 0.8; font-size: 0.85rem; }
+        .btn-leap { background: var(--success); color: white; border: none; flex: 1.2; font-size: 0.85rem; }
 
         .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--grid-header-bg); text-align: center; font-weight: bold; font-size: 0.8rem; padding: 12px 0; color: var(--text-muted); }
         .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
-        
-        .cell { 
-            aspect-ratio: 1/1; 
-            border-right: 1px solid var(--border-color); 
-            border-bottom: 1px solid var(--border-color); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .cell:active { background: var(--selected-bg); }
-        
-        .special-bg { background-color: var(--lunar-special) !important; }
-        
+        .cell { aspect-ratio: 1/1; border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; }
         .solar { font-size: 1.2rem; font-weight: 600; z-index: 2; }
         .lunar { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; z-index: 2; }
         .sun { color: var(--primary); }
         .sat { color: var(--secondary); }
-        
         .today { background: var(--today-bg); outline: 2px solid var(--primary); z-index: 5; border-radius: 4px; }
-        .selected-cell { background: var(--selected-bg) !important; color: white !important; }
+        .selected-cell { background: var(--selected-bg) !important; }
         .special-text { color: var(--primary); font-weight: bold; }
-        .empty { background: var(--empty-bg); cursor: default; }
+        .special-bg { background-color: var(--lunar-special) !important; }
+        .empty { background: var(--empty-bg); }
 
-        .leap-list { display: none; width: 100%; max-width: 450px; background: var(--box-bg); border-radius: 15px; padding: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-top: 15px; }
-        .leap-scroll { max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 10px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; border-bottom: 1px solid var(--border-color); text-align: left; font-size: 1rem; color: var(--text-main); }
-        th { position: sticky; top: 0; background: var(--grid-header-bg); }
+        /* Chấm kỷ niệm dưới ô ngày */
+        .indicator-container { position: absolute; bottom: 3px; display: flex; gap: 2px; justify-content: center; width: 100%; }
+        .dot { width: 5px; height: 5px; border-radius: 50%; }
+        .dot-solar { background-color: var(--color-solar); }
+        .dot-lunar { background-color: var(--color-lunar); }
+        .dot-birthday { background-color: var(--color-birthday); }
+
+        .leap-list { display: none; width: 100%; max-width: 450px; background: var(--box-bg); border-radius: 15px; padding: 15px; margin-top: 15px; border: 1px solid var(--border-color); }
+        .leap-scroll { max-height: 350px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 10px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: var(--grid-header-bg); color: var(--success); position: sticky; top: 0; z-index: 10; }
+        th, td { padding: 12px 8px; border-bottom: 1px solid var(--border-color); text-align: center; color: var(--text-main); }
+        .canchi-col { color: var(--color-tet); font-weight: bold; }
+
+/* CSS cho dòng năm nhuận gần nhất */
+        .highlight-leap {
+            background-color: rgba(102, 187, 106, 0.15) !important;
+            border-left: 4px solid var(--success);
+        }
+        .highlight-leap td {
+            color: var(--success);
+            font-weight: 900;
+        }
+.dot-tietkhi { background-color: #ffffff; } /* Chấm màu trắng cho Tiết khí */
+
+/* CSS cho Popup Tiết Khí */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            position: relative;
+            background: var(--box-bg);
+            margin: 5% auto;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            padding: 15px 20px;
+            background: var(--grid-header-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky; top: 0; z-index: 1;
+        }
+        .modal-body { padding: 20px; }
+        .season-box { margin-bottom: 20px; padding: 15px; border-radius: 10px; background: rgba(255,255,255,0.03); }
+        .season-box h4 { margin-top: 0; border-bottom: 1px solid #444; padding-bottom: 8px; }
+        .spring h4 { color: #66bb6a; }
+        .summer h4 { color: #ffca28; }
+        .autumn h4 { color: #ffa726; }
+        .winter h4 { color: #42a5f5; }
+        .modal-body ul { list-style: none; padding: 0; margin: 0; font-size: 14px; }
+        .modal-body li { margin-bottom: 8px; line-height: 1.4; color: #ccc; }
+        .modal-body b { color: #fff; margin-right: 5px; }
+        .close-btn { background: none; border: none; color: #fff; font-size: 30px; cursor: pointer; }
+
     </style>
 </head>
 <body>
@@ -134,6 +158,7 @@
         <div class="today-my" id="tdMonthYear">Tháng --, Năm ----</div>
         <div class="today-lunar" id="tdLunar">Âm lịch: --/--</div>
         <div class="today-canchi" id="tdCanChi">--</div>
+        <div class="holiday-container" id="holidayBox"></div>
     </div>
 
     <div class="header"><h2 id="monthTitle">THÁNG -- / ----</h2></div>
@@ -144,58 +169,50 @@
             <select id="selMonth" onchange="jump()" style="flex: 1;"></select>
             <button class="btn-nav" onclick="changeMonth(1)">❯</button>
         </div>
-        
         <div class="control-row">
             <button class="btn-nav" onclick="changeYear(-1)">-1</button>
             <input type="number" id="inpYear" onchange="jump()">
             <button class="btn-nav" onclick="changeYear(1)">+1</button>
+            <button onclick="showTietKhiPopup()" style="margin-left: 5px; background: var(--secondary); font-size: 14px;">Tiết khí</button>
         </div>
-
         <div class="action-group">
-            <button class="btn-today" onclick="goToday()">Về Hôm nay</button>
-            <button class="btn-leap" onclick="toggleLeapList()">Xem năm nhuận</button>
+            <button class="btn-today" onclick="goToday()">Hôm nay</button>
+            <button class="btn-tet" onclick="goToTet()">Tết</button>
+            <button class="btn-leap" onclick="toggleLeapList()">Năm nhuận</button>
         </div>
     </div>
 
-    <div class="weekdays">
-        <div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div>
-    </div>
+    <div class="weekdays"><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div></div>
     <div id="grid" class="days-grid"></div>
 </div>
 
 <div id="leapSection" class="leap-list">
-    <h3 style="margin-top:0; color: var(--success);">Năm nhuận (1950 - 2080)</h3>
+    <h3 style="margin-top:0; color: var(--success); text-align: center;">Danh Sách Năm Nhuận (Âm Lịch)</h3>
     <div class="leap-scroll">
-        <table id="leapTable"><thead><tr><th>Năm Âm</th><th>Tháng nhuận</th></tr></thead><tbody></tbody></table>
+        <table id="leapTable">
+            <thead><tr><th>Năm Dương</th><th>Âm Lịch</th><th>Tháng Nhuận</th></tr></thead>
+            <tbody></tbody>
+        </table>
     </div>
 </div>
 
 <script>
-const LEAP_DATA = {
-    1950:3, 1952:8, 1955:3, 1957:8, 1960:6, 1963:4, 1966:3, 1968:7, 1971:5, 1974:4, 1976:8, 1979:6, 1982:4, 1984:10, 1987:6,
-    1990:5, 1993:3, 1995:8, 1998:5, 2001:4, 2004:2, 2006:7, 2009:5, 2012:4, 2014:9, 2017:6, 2020:4, 2023:2, 2025:6, 2028:5, 2031:3, 2033:11, 2036:6, 2039:5, 2042:2, 2044:9, 2047:5,
-    2050:3, 2052:8, 2055:6, 2058:4, 2061:3, 2063:7, 2066:5, 2069:4, 2072:2, 2074:6, 2077:5, 2080:3
-};
+const BIRTHDAYS = { "1/10": "Sinh nhật tôi 🎂", "15/5": "Sinh nhật Vợ ❤️", "26/4": "Sinh nhật con trai 👶" };
+const SOLAR_HOLIDAYS = { "1/1": "Tết Dương Lịch", "3/2": "Ngày thành lập Đảng", "26/3": "Ngày Đoàn viên", "30/4": "Giải phóng miền Nam", "1/5": "Quốc tế Lao động", "19/5": "Sinh nhật Bác Hồ", "1/6": "Quốc tế Thiếu nhi", "27/7": "Ngày Thương binh Liệt sĩ", "19/8": "Cánh mạng Tháng 8", "2/9": "Quốc khánh", "20/10": "Phụ nữ VN", "20/11": "Nhà giáo VN", "22/12": "Ngày Quân đội", "25/12": "Giáng Sinh", "26/4": "Ngày xxx" };
+const LUNAR_HOLIDAYS = { "1/1": "Mùng 1 Tết", "2/1": "Mùng 2 Tết", "3/1": "Mùng 3 Tết", "15/1": "Rằm Tháng Giêng", "10/3": "Giỗ Tổ Hùng Vương", "15/4": "Lễ Phật Đản", "5/5": "Tết Đoan Ngọ", "15/7": "Lễ Vu Lan", "15/8": "Trung Thu", "23/12": "Ông Táo" };
 
+const LEAP_DATA = { 1950:3, 1952:8, 1955:3, 1957:8, 1960:6, 1963:4, 1966:3, 1968:7, 1971:5, 1974:4, 1976:8, 1979:6, 1982:4, 1984:10, 1987:6, 1990:5, 1993:3, 1995:8, 1998:5, 2001:4, 2004:2, 2006:7, 2009:5, 2012:4, 2014:9, 2017:6, 2020:4, 2023:2, 2025:6, 2028:5, 2031:3, 2033:11, 2036:6, 2039:5, 2042:2, 2044:9, 2047:5, 2050:3, 2052:8, 2055:6, 2058:4, 2061:3, 2063:7, 2066:5, 2069:4, 2072:2, 2074:6, 2077:5, 2080:3 };
 const CAN = ["Canh", "Tân", "Nhâm", "Quý", "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ"];
 const CHI = ["Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi"];
-const CHI_THANG = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
+const TIET_KHI = [
+    "Tiểu Hàn", "Đại Hàn", "Lập Xuân", "Vũ Thủy", "Kinh Trập", "Xuân Phân", 
+    "Thanh Minh", "Cốc Vũ", "Lập Hạ", "Tiểu Mãn", "Mang Chủng", "Hạ Chí", 
+    "Tiểu Thử", "Đại Thử", "Lập Thu", "Xử Thử", "Bạch Lộ", "Thu Phân", 
+    "Hàn Lộ", "Sương Giáng", "Lập Đông", "Tiểu Tuyết", "Đại Tuyết", "Đông Chí"
+];
 
-function getNewMoon(k) {
-    let T = k / 1236.85;
-    let JDN = 2451550.09766 + 29.530588861 * k + 0.0001337 * T * T;
-    let dr = Math.PI / 180;
-    let M = (2.5534 + 29.10535670 * k) * dr, Mpr = (201.5643 + 385.81693528 * k) * dr;
-    let F = (160.7108 + 390.67050284 * k) * dr, E = 1 - 0.002516 * T;
-    let delta = -0.4072 * Math.sin(Mpr) + 0.1724 * E * Math.sin(M) + 0.0161 * Math.sin(2 * Mpr) + 0.0104 * Math.sin(2 * F);
-    return JDN + delta + 7/24; 
-}
-
-function getJD(d, m, y) {
-    if (m <= 2) { y -= 1; m += 12; }
-    let a = Math.floor(y / 100), b = 2 - a + Math.floor(a / 4);
-    return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + b - 1524.5;
-}
+function getNewMoon(k) { let T = k / 1236.85; let JDN = 2451550.09766 + 29.530588861 * k + 0.0001337 * T * T; let dr = Math.PI / 180; let M = (2.5534 + 29.10535670 * k) * dr, Mpr = (201.5643 + 385.81693528 * k) * dr; let F = (160.7108 + 390.67050284 * k) * dr, E = 1 - 0.002516 * T; let delta = -0.4072 * Math.sin(Mpr) + 0.1724 * E * Math.sin(M) + 0.0161 * Math.sin(2 * Mpr) + 0.0104 * Math.sin(2 * F); return JDN + delta + 7/24; }
+function getJD(d, m, y) { if (m <= 2) { y -= 1; m += 12; } let a = Math.floor(y / 100), b = 2 - a + Math.floor(a / 4); return Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d + b - 1524.5; }
 
 function getLunarDate(d, m, y) {
     const jd = Math.floor(getJD(d, m, y) + 0.5);
@@ -205,56 +222,51 @@ function getLunarDate(d, m, y) {
     let next_nm = Math.floor(getNewMoon(k + 1) + 0.5);
     while (jd >= next_nm) { k++; nm = next_nm; next_nm = Math.floor(getNewMoon(k + 1) + 0.5); }
     let currentK = 298, lYear = 2024, lMonth = 1, isLeap = false;
-    if (k > currentK) {
-        while (currentK < k) {
-            currentK++;
-            if (isLeap) { lMonth++; isLeap = false; if (lMonth > 12) { lMonth = 1; lYear++; } } 
-            else {
-                if (LEAP_DATA[lYear] === lMonth) isLeap = true;
-                else { lMonth++; if (lMonth > 12) { lMonth = 1; lYear++; } }
-            }
-        }
-    } else if (k < currentK) {
-        while (currentK > k) {
-            currentK--;
-            if (isLeap) isLeap = false;
-            else {
-                lMonth--; if (lMonth < 1) { lYear--; lMonth = 12; }
-                if (LEAP_DATA[lYear] === lMonth) isLeap = true;
-            }
-        }
-    }
+    if (k > currentK) { while (currentK < k) { currentK++; if (isLeap) { lMonth++; isLeap = false; if (lMonth > 12) { lMonth = 1; lYear++; } } else { if (LEAP_DATA[lYear] === lMonth) isLeap = true; else { lMonth++; if (lMonth > 12) { lMonth = 1; lYear++; } } } } } 
+    else if (k < currentK) { while (currentK > k) { currentK--; if (isLeap) isLeap = false; else { lMonth--; if (lMonth < 1) { lYear--; lMonth = 12; } if (LEAP_DATA[lYear] === lMonth) isLeap = true; } } }
     return { ld: jd - nm + 1, lm: lMonth, ly: lYear, isLeap: isLeap };
 }
 
 let viewDate = new Date();
 
-// Hàm cập nhật Banner thông tin chi tiết (dùng chung cho cả click và load trang)
 function displayDateInfo(date) {
-    const days = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    // ... (Giữ nguyên phần tính toán Can Chi như ở câu trả lời trước) ...
     const d = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear();
+    const lun = getLunarDate(d, m, y);
+    const jd = Math.floor(getJD(d, m, y) + 0.5);
+    const tkToday = getTietKhi(d, m, y);
     
-    // Cập nhật Dương lịch
+    // Kiểm tra xem hôm nay có phải ngày bắt đầu Tiết khí không
+    const prevDate = new Date(y, m - 1, d - 1);
+    const tkPrev = getTietKhi(prevDate.getDate(), prevDate.getMonth() + 1, prevDate.getFullYear());
+    const isNewTietKhi = (tkToday !== tkPrev);
+
+    // Hiển thị Banner
     document.getElementById('tdDow').innerText = days[date.getDay()];
     document.getElementById('tdSolar').innerText = d;
     document.getElementById('tdMonthYear').innerText = `Tháng ${m}, Năm ${y}`;
+    document.getElementById('tdLunar').innerText = `Âm lịch: ${lun.ld}/${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
     
-    // Cập nhật Âm lịch
-    const lun = getLunarDate(d, m, y);
-    let lunarStr = `${lun.ld}/${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
-    document.getElementById('tdLunar').innerText = `Âm lịch: ${lunarStr}`;
+    // Hiển thị Can Chi và Tiết khí hiện tại
+    document.getElementById('tdCanChi').innerHTML = `
+        Ngày <b>${CAN[(jd + 3) % 10]} ${CHI[(jd + 5) % 12]}</b>, Tháng <b>${CAN[(((lun.ly % 5) * 2 + 8) % 10 + lun.lm - 1) % 10]} ${CHI[(lun.lm + 5) % 12]}</b><br>
+        Năm <b>${CAN[lun.ly % 10]} ${CHI[lun.ly % 12]}</b> | Tiết: <b>${tkToday}</b>
+    `;
+    
+    const holidayBox = document.getElementById('holidayBox');
+    holidayBox.innerHTML = '';
 
-    // Tính Can Chi
-    const yearCan = CAN[lun.ly % 10];
-    const yearChi = CHI[lun.ly % 12];
-    const canOffset = [8, 0, 2, 4, 6, 8, 0, 2, 4, 6][lun.ly % 10];
-    const monthCan = CAN[(canOffset + lun.lm - 1) % 10];
-    const monthChi = CHI_THANG[(lun.lm + 1) % 12];
-    const jd = Math.floor(getJD(d, m, y) + 0.5);
-    const dayCan = CAN[(jd + 3) % 10];
-    const dayChi = CHI[(jd + 5) % 12];
+    // Nếu là ngày bắt đầu Tiết khí, hiển thị vào mục kỷ niệm
+    if (isNewTietKhi) {
+        holidayBox.innerHTML += `<div class="holiday-item" style="color: #fff; border: 1px solid #fff;">🌿 Tiết ${tkToday} (Bắt đầu)</div>`;
+    }
 
-    document.getElementById('tdCanChi').innerHTML = `Ngày <b>${dayCan} ${dayChi}</b>, Tháng <b>${monthCan} ${monthChi}</b>, Năm <b>${yearCan} ${yearChi}</b>`;
+    // Các kỷ niệm khác
+    const solKey = `${d}/${m}`;
+    const lunKey = `${lun.ld}/${lun.lm}`;
+    if (SOLAR_HOLIDAYS[solKey]) holidayBox.innerHTML += `<div class="holiday-item txt-solar">⭐ ${SOLAR_HOLIDAYS[solKey]}</div>`;
+    if (LUNAR_HOLIDAYS[lunKey] && !lun.isLeap) holidayBox.innerHTML += `<div class="holiday-item txt-lunar">🌙 ${LUNAR_HOLIDAYS[lunKey]}</div>`;
+    if (BIRTHDAYS[solKey]) holidayBox.innerHTML += `<div class="holiday-item txt-birthday">🎂 ${BIRTHDAYS[solKey]}</div>`;
 }
 
 function render() {
@@ -274,64 +286,250 @@ function render() {
         const dateObj = new Date(y, m, d), dow = dateObj.getDay();
         const lun = getLunarDate(d, m + 1, y);
         const isToday = d === new Date().getDate() && m === new Date().getMonth() && y === new Date().getFullYear();
-        const isSpecialDay = (lun.ld === 1 || lun.ld === 15);
-        let lunarTxt = lun.ld === 1 ? `${lun.ld}/${lun.lm}${lun.isLeap?'n':''}` : lun.ld;
+        const isSelected = d === viewDate.getDate() && m === viewDate.getMonth() && y === viewDate.getFullYear();
         
-        // Tạo element div cho ngày
         const cell = document.createElement('div');
-        cell.className = `cell ${isToday ? 'today' : ''} ${isSpecialDay ? 'special-bg' : ''}`;
+        cell.className = `cell ${isToday ? 'today' : ''} ${isSelected ? 'selected-cell' : ''} ${(lun.ld === 1 || lun.ld === 15) ? 'special-bg' : ''}`;
+        
+        // --- LOGIC KIỂM TRA TIẾT KHÍ BẮT ĐẦU ---
+        let indicators = '';
+        const tkToday = getTietKhi(d, m + 1, y);
+        const prevDate = new Date(y, m, d - 1);
+        const tkPrev = getTietKhi(prevDate.getDate(), prevDate.getMonth() + 1, prevDate.getFullYear());
+        
+        // Nếu tiết khí hôm nay khác hôm qua -> Đây là ngày bắt đầu tiết khí mới
+        if (tkToday !== tkPrev) {
+            indicators += '<div class="dot dot-tietkhi"></div>';
+        }
+        // ---------------------------------------
+
+        if (SOLAR_HOLIDAYS[`${d}/${m+1}`]) indicators += '<div class="dot dot-solar"></div>';
+        if (LUNAR_HOLIDAYS[`${lun.ld}/${lun.lm}`] && !lun.isLeap) indicators += '<div class="dot dot-lunar"></div>';
+        if (BIRTHDAYS[`${d}/${m+1}`]) indicators += '<div class="dot dot-birthday"></div>';
+
         cell.innerHTML = `
             <div class="solar ${dow==0?'sun':(dow==6?'sat':'')}">${d}</div>
-            <div class="lunar ${lun.ld==1||lun.ld==15?'special-text':''}">${lunarTxt}</div>
+            <div class="lunar ${(lun.ld===1||lun.ld===15)?'special-text':''}">${lun.ld === 1 ? lun.ld+'/'+lun.lm : lun.ld}</div>
+            <div class="indicator-container">${indicators}</div>
         `;
         
-        // Sự kiện Click vào ngày
         cell.onclick = () => {
-            // Xóa highlight cũ (nếu có)
-            document.querySelectorAll('.cell').forEach(c => c.classList.remove('selected-cell'));
-            // Thêm highlight mới
-            cell.classList.add('selected-cell');
-            // Cập nhật banner
-            displayDateInfo(dateObj);
-            // Cuộn lên đầu trang nếu là mobile
-            if(window.innerWidth < 600) window.scrollTo({top: 0, behavior: 'smooth'});
+            viewDate = new Date(y, m, d);
+            displayDateInfo(viewDate);
+            render();
         };
-        
         grid.appendChild(cell);
     }
 }
 
-function init() {
-    // Hiển thị mặc định ngày hiện tại
-    displayDateInfo(new Date());
+function changeMonth(n) { viewDate.setMonth(viewDate.getMonth() + n); displayDateInfo(viewDate); render(); }
+function changeYear(n) { viewDate.setFullYear(viewDate.getFullYear() + n); displayDateInfo(viewDate); render(); }
+function jump() { viewDate = new Date(document.getElementById('inpYear').value, document.getElementById('selMonth').value, 1); displayDateInfo(viewDate); render(); }
+function goToday() { viewDate = new Date(); displayDateInfo(viewDate); render(); }
+
+function goToTet() {
+    let currentYear = viewDate.getFullYear();
+    function findLunarNewYear(solarYear) {
+        for (let m = 1; m <= 2; m++) {
+            for (let d = 1; d <= 31; d++) {
+                let dObj = new Date(solarYear, m - 1, d);
+                if (dObj.getMonth() !== m - 1) continue; 
+                let lun = getLunarDate(d, m, solarYear);
+                if (lun.ld === 1 && lun.lm === 1) return dObj;
+            }
+        }
+        return null;
+    }
+    let targetTet = findLunarNewYear(currentYear);
+    if (viewDate >= targetTet) targetTet = findLunarNewYear(currentYear + 1);
     
-    const sel = document.getElementById('selMonth');
-    const months = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
-    months.forEach((name, i) => { let opt = new Option(name, i); sel.add(opt); });
-    render();
+    if (targetTet) {
+        viewDate = targetTet;
+        displayDateInfo(viewDate);
+        render();
+    }
 }
 
-function changeMonth(n) { viewDate.setMonth(viewDate.getMonth() + n); render(); }
-function changeYear(n) { viewDate.setFullYear(viewDate.getFullYear() + n); render(); }
-function jump() { viewDate = new Date(document.getElementById('inpYear').value, document.getElementById('selMonth').value, 1); render(); }
-function goToday() { 
-    viewDate = new Date(); 
-    displayDateInfo(viewDate);
-    render(); 
-}
 function toggleLeapList() {
     const sec = document.getElementById('leapSection');
     if (sec.style.display === 'block') { sec.style.display = 'none'; return; }
+    
     const tbody = document.querySelector('#leapTable tbody');
     tbody.innerHTML = '';
-    Object.keys(LEAP_DATA).sort().forEach(yr => {
-        tbody.innerHTML += `<tr><td>Năm ${yr}</td><td>Tháng ${LEAP_DATA[yr]}</td></tr>`;
+    
+    const years = Object.keys(LEAP_DATA).map(Number).sort((a, b) => a - b);
+    const currentYear = viewDate.getFullYear();
+    
+    // Tìm năm nhuận có khoảng cách gần nhất với năm đang hiển thị
+    const closestYear = years.reduce((prev, curr) => 
+        Math.abs(curr - currentYear) < Math.abs(prev - currentYear) ? curr : prev
+    );
+
+    years.forEach(yr => {
+        const canChi = `${CAN[yr % 10]} ${CHI[yr % 12]}`;
+        const isClosest = (yr === closestYear);
+        
+        // Thêm class highlight và id nếu là năm gần nhất
+        tbody.innerHTML += `
+            <tr ${isClosest ? 'id="closestLeapRow" class="highlight-leap"' : ''}>
+                <td>${yr} ${isClosest ? '<br><small>(Gần nhất)</small>' : ''}</td>
+                <td class="canchi-col">${canChi}</td>
+                <td>Tháng ${LEAP_DATA[yr]}</td>
+            </tr>`;
     });
+    
     sec.style.display = 'block';
-    sec.scrollIntoView({ behavior: 'smooth' });
+    
+    // Tự động cuộn đến dòng được highlight sao cho nằm giữa bảng
+    setTimeout(() => {
+        const highlightRow = document.getElementById('closestLeapRow');
+        const scrollContainer = document.querySelector('.leap-scroll');
+        
+        if (highlightRow && scrollContainer) {
+            const rowOffset = highlightRow.offsetTop;
+            const containerHalf = scrollContainer.clientHeight / 2;
+            const rowHalf = highlightRow.clientHeight / 2;
+            
+            // Đẩy dòng được chọn ra giữa vùng scroll
+            scrollContainer.scrollTop = rowOffset - containerHalf + rowHalf;
+        }
+        sec.scrollIntoView({ behavior: 'smooth' });
+    }, 10);
+}
+function getTietKhi(d, m, y) {
+    const jd = getJD(d, m, y);
+    // Tính toán số thế kỷ kể từ J2000.0
+    const T = (jd - 2451545.0) / 36525;
+    
+    // Kinh độ trung bình (L) và Góc cận điểm trung bình (M) của Mặt trời
+    let L = 280.46646 + 36000.76983 * T;
+    let M = 357.52911 + 35999.05029 * T;
+    
+    // Tính Kinh độ thực (lambda) của Mặt trời (có tính đến phương trình tâm)
+    let lambda = L + 1.9148 * Math.sin(M * Math.PI / 180) + 0.02 * Math.sin(2 * M * Math.PI / 180);
+    
+    // Chuẩn hóa lambda về khoảng [0, 360)
+    lambda = lambda % 360;
+    if (lambda < 0) lambda += 360;
+    
+    // Mỗi tiết khí chiếm 15 độ kinh độ. 0 độ = Xuân Phân (index 5 trong mảng TIET_KHI)
+    let index = Math.floor(lambda / 15);
+    
+    // ĐÃ SỬA: Điều chỉnh offset để 0 độ (Xuân Phân) trỏ đúng vào TIET_KHI[5]
+    let finalIndex = (index + 5) % 24;
+    
+    return TIET_KHI[finalIndex];
+}
+
+function displayDateInfo(date) {
+    const days = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    const d = date.getDate(), m = date.getMonth() + 1, y = date.getFullYear();
+    const lun = getLunarDate(d, m, y);
+    const jd = Math.floor(getJD(d, m, y) + 0.5);
+    const tk = getTietKhi(d, m, y); // Lấy Tiết khí
+    
+    document.getElementById('tdDow').innerText = days[date.getDay()];
+    document.getElementById('tdSolar').innerText = d;
+    document.getElementById('tdMonthYear').innerText = `Tháng ${m}, Năm ${y}`;
+    document.getElementById('tdLunar').innerText = `Âm lịch: ${lun.ld}/${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
+    
+    const dayCan = CAN[(jd + 3) % 10], dayChi = CHI[(jd + 5) % 12];
+    const yearCan = CAN[lun.ly % 10], yearChi = CHI[lun.ly % 12];
+    const monthCanStart = ((lun.ly % 5) * 2 + 8) % 10;
+    const monthCan = CAN[(monthCanStart + lun.lm - 1) % 10];
+    const monthChi = CHI[(lun.lm + 5) % 12]; 
+    
+    // Hiển thị thêm Tiết khí ở dòng dưới cùng
+    document.getElementById('tdCanChi').innerHTML = `
+        Ngày <b>${dayCan} ${dayChi}</b>, Tháng <b>${monthCan} ${monthChi}</b><br>
+        Năm <b>${yearCan} ${yearChi}</b> | Tiết: <b>${tk}</b>
+    `;
+    
+    // ... phần logic kỷ niệm giữ nguyên như cũ ...
+    const holidayBox = document.getElementById('holidayBox');
+    holidayBox.innerHTML = '';
+    const solKey = `${d}/${m}`;
+    const lunKey = `${lun.ld}/${lun.lm}`;
+
+    if (SOLAR_HOLIDAYS[solKey]) holidayBox.innerHTML += `<div class="holiday-item txt-solar">⭐ ${SOLAR_HOLIDAYS[solKey]}</div>`;
+    if (LUNAR_HOLIDAYS[lunKey] && !lun.isLeap) holidayBox.innerHTML += `<div class="holiday-item txt-lunar">🌙 ${LUNAR_HOLIDAYS[lunKey]}</div>`;
+    if (BIRTHDAYS[solKey]) holidayBox.innerHTML += `<div class="holiday-item txt-birthday">🎂 ${BIRTHDAYS[solKey]}</div>`;
+}
+
+function showTietKhiPopup() {
+    document.getElementById('tietKhiPopup').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Khóa cuộn trang web khi mở popup
+}
+
+function hideTietKhiPopup() {
+    document.getElementById('tietKhiPopup').style.display = 'none';
+    document.body.style.overflow = 'auto'; // Mở lại cuộn trang
+}
+
+function init() {
+    const sel = document.getElementById('selMonth');
+    ["T1","T2","T3","T4","T5","T6","T7","T8","T9","T10","T11","T12"].forEach((name, i) => { sel.add(new Option(name, i)); });
+    displayDateInfo(new Date());
+    render();
 }
 
 init();
 </script>
+
+<div id="tietKhiPopup" class="modal-overlay" onclick="hideTietKhiPopup(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h3>24 Tiết Khí Trong Năm</h3>
+            <button class="close-btn" onclick="hideTietKhiPopup()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="season-box spring">
+                <h4>🌸 Mùa Xuân (Từ tháng 2)</h4>
+                <ul>
+                    <li><b>Lập Xuân:</b> 04/02 - 05/02: Bắt đầu mùa xuân.</li>
+                    <li><b>Vũ Thủy:</b> 18/02 - 19/02: Mưa ẩm bắt đầu rơi.</li>
+                    <li><b>Kinh Trập:</b> 05/03 - 06/03: Sâu bọ tỉnh giấc.</li>
+                    <li><b>Xuân Phân:</b> 20/03 - 21/03: Giữa mùa xuân, ngày đêm bằng nhau.</li>
+                    <li><b>Thanh Minh:</b> 04/04 - 05/04: Trời trong sáng, tảo mộ.</li>
+                    <li><b>Cốc Vũ:</b> 20/04 - 21/04: Mưa rào cho ngũ cốc.</li>
+                </ul>
+            </div>
+            <div class="season-box summer">
+                <h4>☀️ Mùa Hạ (Từ tháng 5)</h4>
+                <ul>
+                    <li><b>Lập Hạ:</b> 05/05 - 06/05: Bắt đầu mùa hè.</li>
+                    <li><b>Tiểu Mãn:</b> 21/05 - 22/05: Lũ nhỏ, lúa chín.</li>
+                    <li><b>Mang Chủng:</b> 05/06 - 06/06: Gieo mạ.</li>
+                    <li><b>Hạ Chí:</b> 21/06 - 22/06: Ngày dài nhất năm.</li>
+                    <li><b>Tiểu Thử:</b> 07/07 - 08/07: Nóng nhẹ.</li>
+                    <li><b>Đại Thử:</b> 22/07 - 23/07: Nóng nhất năm.</li>
+                </ul>
+            </div>
+            <div class="season-box autumn">
+                <h4>🍂 Mùa Thu (Từ tháng 8)</h4>
+                <ul>
+                    <li><b>Lập Thu:</b> 07/08 - 08/08: Bắt đầu mùa thu.</li>
+                    <li><b>Xử Thử:</b> 23/08 - 24/08: Nóng bức lui dần.</li>
+                    <li><b>Bạch Lộ:</b> 07/09 - 08/09: Có sương rơi.</li>
+                    <li><b>Thu Phân:</b> 22/09 - 23/09: Giữa thu, ngày đêm bằng nhau.</li>
+                    <li><b>Hàn Lộ:</b> 08/10 - 09/10: Sương bắt đầu lạnh.</li>
+                    <li><b>Sương Giáng:</b> 23/10 - 24/10: Sương đọng hạt trắng.</li>
+                </ul>
+            </div>
+            <div class="season-box winter">
+                <h4>❄️ Mùa Đông (Từ tháng 11)</h4>
+                <ul>
+                    <li><b>Lập Đông:</b> 07/11 - 08/11: Bắt đầu mùa đông.</li>
+                    <li><b>Tiểu Tuyết:</b> 22/11 - 23/11: Tuyết rơi nhẹ.</li>
+                    <li><b>Đại Tuyết:</b> 07/12 - 08/12: Tuyết rơi dày.</li>
+                    <li><b>Đông Chí:</b> 21/12 - 22/12: Ngày ngắn nhất năm.</li>
+                    <li><b>Tiểu Hàn:</b> 05/01 - 06/01: Rét nhẹ.</li>
+                    <li><b>Đại Hàn:</b> 20/01 - 21/01: Rét đậm nhất năm.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
