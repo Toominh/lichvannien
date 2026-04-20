@@ -53,8 +53,31 @@
         .txt-lunar { color: var(--color-lunar) !important; }
         .txt-birthday { color: var(--color-birthday) !important; }
 
-        .header { background: var(--box-bg); color: var(--primary); padding: 12px; text-align: center; border-bottom: 1px solid var(--border-color); }
-        .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px; }
+.header { 
+    background: var(--box-bg); 
+    color: var(--primary); 
+    padding: 12px 15px; 
+    border-bottom: 1px solid var(--border-color); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    position: relative; /* Thêm relative để neo đồng hồ */
+}
+.header h2 { 
+    margin: 0; 
+    font-size: 1.1rem; 
+    letter-spacing: 1px; 
+}
+/* CSS cho Đồng hồ */
+#realtimeClock { 
+    position: absolute; 
+    right: 15px; 
+    color: #ffffff; 
+    font-size: 1.4rem; 
+    font-weight: 800; 
+    font-variant-numeric: tabular-nums; /* Giúp bề rộng các con số cố định, không bị giật khi nhảy phút */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
 
         /* 2. CHỈNH SỬA CỤM ĐIỀU KHIỂN */
         .controls { padding: 12px; background: var(--box-bg); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
@@ -135,7 +158,10 @@
         <div class="holiday-container" id="holidayBox"></div>
     </div>
 
-    <div class="header"><h2 id="monthTitle">THÁNG -- / ----</h2></div>
+<div class="header">
+    <h2 id="monthTitle">THÁNG -- / ----</h2>
+    <div id="realtimeClock">--:--</div>
+</div>
     
     <div class="controls">
         <div class="control-row">
@@ -471,6 +497,19 @@ function init() {
     displayDateInfo(new Date());
     render();
 }
+
+function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('realtimeClock').innerText = `${h}:${m}`;
+}
+// Chạy ngay lần đầu và thiết lập lặp lại mỗi 1 giây (1000ms)
+updateClock();
+setInterval(updateClock, 1000);
+
+init(); // Giữ nguyên dòng gọi hàm init ban đầu
+
 init();
 </script>
 
