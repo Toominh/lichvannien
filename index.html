@@ -242,15 +242,9 @@ button:hover {
             <button class="close-btn" onclick="hideAboutPopup()">×</button>
         </div>
         <div class="modal-body" style="line-height: 1.6; text-align: justify;">
-            <p><strong>Lịch Vạn Niên TU AN</strong> là công cụ quản lý thời gian với các tính năng nổi bật:</p>
-            <ul>
-                <li>Xem lịch âm dương, Can Chi, Tiết khí chính xác.</li>
-                <li>Quản lý sự kiện cá nhân, ngày kỷ niệm, sinh nhật.</li>
-                <li>Theo dõi các ngày lễ quan trọng và năm nhuận.</li>
-                <li>Bảo mật và sao lưu dữ liệu cá nhân tiện lợi</li>
-                                
-            </ul>
-            <p>Sản phẩm được phát triển nhằm mục đích lưu giữ các giá trị văn hóa truyền thống Việt Nam trong kỷ nguyên số.</p>
+            <p>Là một công cụ lịch vạn niên trực tuyến giúp người dùng tra cứu ngày tháng âm – dương một cách nhanh chóng và thuận tiện. Bên cạnh chức năng xem lịch thông thường, trang web còn cho phép ghi nhớ các ngày kỷ niệm hằng năm theo cả âm lịch và dương lịch, rất phù hợp để lưu lại những ngày quan trọng như sinh nhật, ngày lễ, ngày giỗ, ngày kỷ niệm gia đình… Người dùng có thể phân loại sự kiện theo từng mục rõ ràng, giúp việc quản lý và theo dõi các dịp quan trọng trở nên dễ dàng hơn — một tiện ích mà nhiều ứng dụng lịch phổ biến hiện nay chưa hỗ trợ tốt đối với lịch âm.</p>
+            
+            <p>Ngoài ra, trang web còn hỗ trợ sao lưu và khôi phục dữ liệu, giúp người dùng bảo vệ và chuyển đổi thông tin lịch cá nhân khi cần. Công cụ cũng cho phép xem các năm nhuận của âm lịch, giúp hiểu rõ hơn cách vận hành của lịch truyền thống. Với giao diện đơn giản, nhẹ và chạy trực tiếp trên trình duyệt, đây là một giải pháp hữu ích để quản lý lịch cá nhân và các ngày kỷ niệm quan trọng theo văn hóa lịch pháp Á Đông.</p>
             <div style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.8rem;">
                 Phiên bản 1.0.0 &copy; 2026
             </div>
@@ -295,7 +289,7 @@ button:hover {
 <div id="manageModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Danh Sách Đề Mục</h3>
+            <h3>Danh Sách Lịch</h3>
             <button class="close-btn" onclick="closeManageModal()">×</button>
         </div>
         <div class="modal-body" id="categoryListContainer" style="padding:0"></div>
@@ -496,7 +490,7 @@ function openCategoryModal(catId = null) {
         document.getElementById('catName').value = '';
         document.getElementById('catColor').value = '#ef5350';
         addNewEventRow();
-        document.getElementById('catModalTitle').innerText = "Thêm đề mục mới";
+        document.getElementById('catModalTitle').innerText = "Thêm lịch mới";
     }
     modal.style.display = 'block';
 }
