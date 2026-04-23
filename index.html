@@ -768,13 +768,25 @@ function hideUpcomingEvents() { document.getElementById('eventsPopup').style.dis
 })();
 
 function exportFullHTML() {
-    const htmlContent = document.documentElement.outerHTML;
+    // Lấy toàn bộ mã HTML của trang hiện tại và thêm lại thẻ DOCTYPE
+    let htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+    
+    // Chuyển đổi dữ liệu userCategories hiện tại thành chuỗi JSON có định dạng đẹp (xuống dòng, lùi lề)
+    const newCategoriesJSON = JSON.stringify(userCategories, null, 4);
+    
+    // Tìm mảng DEFAULT_CATEGORIES cũ trong mã nguồn và thay thế bằng dữ liệu mới nhất
+    htmlContent = htmlContent.replace(
+        /const DEFAULT_CATEGORIES\s*=\s*\[[\s\S]*?\];/, 
+        `const DEFAULT_CATEGORIES = ${newCategoriesJSON};`
+    );
+
+    // Tạo file HTML và tải xuống
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Lich_Tu_An_Backup.html';
+    a.download = 'Lich_Tu_An_Backup.html'; // Bạn có thể đổi tên file mặc định ở đây nếu muốn
     document.body.appendChild(a);
     a.click();
     
