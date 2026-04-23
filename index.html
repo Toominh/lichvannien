@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Lịch Vạn Niên TU AN</title>
+    <title>Lịch TU AN</title>
     <style>
         :root {
             --primary: #ef5350;
             --secondary: #64b5f6;
             --bg: #121212;
             --success: #66bb6a;
-            --lunar-special: #3d3b2c;
+            --lunar-special: #282828;
             --box-bg: #1e1e1e;
             --text-main: #f5f5f5;
             --text-muted: #aaaaaa;
@@ -45,13 +45,13 @@
         
         .holiday-container { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; }
         .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; 
+            background: #5c8200;
         }
         
         .header { background: var(--box-bg); color: #71b6f8; padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: none; justify-content: center; align-items: center; position: relative; }
         .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px;
             color: yellow;
          }
-
 
         .controls { padding: 12px; background: var(--box-bg); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
         .control-row { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
@@ -91,8 +91,8 @@
         .dot-tietkhi { background-color: #ffffff; }
 
         /* Admin Controls */
-        .admin-controls { display: flex; gap: 8px; justify-content: center; margin-top: 15px; width: 100%; max-width: 450px; }
-        .btn-admin { background: #455a64; color: white; border: none; padding: 10px 5px; font-size: 0.8rem; border-radius: 8px; flex: 1; }
+        .admin-controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px; width: 100%; max-width: 450px; }
+        .btn-admin { background: #455a64; color: white; border: none; padding: 10px 2px; font-size: 0.75rem; border-radius: 8px; flex: 1; text-align: center; }
 
         .event-row { display: flex; gap: 5px; margin-bottom: 8px; align-items: center; }
         .event-row input[type="text"] { flex: 1; padding: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: #fff; border-radius: 4px; }
@@ -120,38 +120,57 @@
         td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); text-align: center; color: var(--text-main); }
         .highlight-leap { background-color: rgba(102, 187, 106, 0.15) !important; border-left: 4px solid var(--success); }
 
-/* Style cho icon SVG trong button */
-button svg {
-    width: 26px;
-    height: 26px;
-    vertical-align: middle;
-    margin-right: 2px; /* Khoảng cách với chữ */
-    fill: none;
-    stroke: rgb(208 208 208);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
+        /* Style cho icon SVG trong button (Chỉ giữ lại cho nút điều hướng) */
+        button svg {
+            vertical-align: middle;
+            fill: none;
+            stroke: rgb(208 208 208);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
 
-/* Riêng nút điều hướng thì không cần margin-right */
-.btn-nav svg { margin-right: 0; width: 26px; height: 26px; }
+        .btn-nav svg { width: 26px; height: 26px; }
 
-/* Hiệu ứng hover cho nút chuyên nghiệp hơn */
-button:hover {
-    filter: brightness(1.2);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-.modal-body li {
-    padding: 6px;
-    font-size: 1rem;
-}
-.modal-body h4 {
-    font-size: 1rem;
-}
-.modal-body table {
-    font-size: 1rem;
-}
+        /* Hiệu ứng hover cho nút chuyên nghiệp hơn */
+        button:hover {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .modal-body li {
+            padding: 6px;
+            font-size: 1rem;
+        }
+        .modal-body h4 {
+            font-size: 1rem;
+        }
+        .modal-body table {
+            font-size: 1rem;
+        }
+
+        /* Style cho bảng chọn màu fix sẵn */
+        .color-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+        .color-swatch.active {
+            border-color: #ffffff;
+            transform: scale(1.15);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+
+        .info p{
+            color: #cdcdcd;
+        }
     </style>
 </head>
 <body>
@@ -181,7 +200,7 @@ button:hover {
          SỰ KIỆN
         </button>
         <button class="btn-today" onclick="goToday()">
-          TODAY
+          Hôm nay
         </button>
         
         <button class="btn-leap" onclick="openLeapModal()">
@@ -212,36 +231,20 @@ button:hover {
 </div>
 
 <div class="admin-controls">
-    <button class="btn-admin" onclick="openCategoryModal()">
-        <svg><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Thêm lịch
-    </button>
-    <button class="btn-admin" onclick="openManageModal()">
-        <svg><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Quản Lý
-    </button>
-    <button class="btn-admin" onclick="exportData()">
-        <svg><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Xuất
-    </button>
-    <button class="btn-admin" onclick="importData()">
-        <svg><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Nhập
-    </button>
-</div>
-
-<div class="admin-controls" style="margin-top: 10px;">
-    <button class="btn-admin" style="background: #2e7d32;" onclick="exportFullHTML()">
-        <svg><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> Sao Lưu
-    </button>
-    <button class="btn-admin" style="background: #1565c0;" onclick="showAboutPopup()">
-        <svg><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Giới thiệu
-    </button>
+    <button class="btn-admin" onclick="openManageModal()">Quản Lý</button>
+    <button class="btn-admin" onclick="exportData()">Xuất</button>
+    <button class="btn-admin" onclick="importData()">Nhập</button>
+    <button class="btn-admin" onclick="exportFullHTML()">Sao Lưu</button>
+    <button class="btn-admin" onclick="showAboutPopup()">Giới thiệu</button>
 </div>
 
 <div id="aboutPopup" class="modal-overlay" onclick="hideAboutPopup()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
-            <h3>Giới Thiệu Lịch Vạn Niên TU AN</h3>
+            <h3>Giới Thiệu Lịch TU AN</h3>
             <button class="close-btn" onclick="hideAboutPopup()">×</button>
         </div>
-        <div class="modal-body" style="line-height: 1.6; text-align: justify;">
+        <div class="modal-body info" style="line-height: 1.6; text-align: justify;">
             <p>Là một công cụ lịch vạn niên trực tuyến giúp người dùng tra cứu ngày tháng âm – dương một cách nhanh chóng và thuận tiện. Bên cạnh chức năng xem lịch thông thường, trang web còn cho phép ghi nhớ các ngày kỷ niệm hằng năm theo cả âm lịch và dương lịch, rất phù hợp để lưu lại những ngày quan trọng như sinh nhật, ngày lễ, ngày giỗ, ngày kỷ niệm gia đình… Người dùng có thể phân loại sự kiện theo từng mục rõ ràng, giúp việc quản lý và theo dõi các dịp quan trọng trở nên dễ dàng hơn — một tiện ích mà nhiều ứng dụng lịch phổ biến hiện nay chưa hỗ trợ tốt đối với lịch âm.</p>
             
             <p>Ngoài ra, trang web còn hỗ trợ sao lưu và khôi phục dữ liệu, giúp người dùng bảo vệ và chuyển đổi thông tin lịch cá nhân khi cần. Công cụ cũng cho phép xem các năm nhuận của âm lịch, giúp hiểu rõ hơn cách vận hành của lịch truyền thống. Với giao diện đơn giản, nhẹ và chạy trực tiếp trên trình duyệt, đây là một giải pháp hữu ích để quản lý lịch cá nhân và các ngày kỷ niệm quan trọng theo văn hóa lịch pháp Á Đông.</p>
@@ -251,6 +254,7 @@ button:hover {
         </div>
     </div>
 </div>
+
 <div id="categoryModal" class="modal-overlay">
     <div class="modal-content">
         <div class="modal-header">
@@ -273,7 +277,14 @@ button:hover {
                 </div>
                 <div>
                     <label>Màu sắc:</label><br>
-                    <input type="color" id="catColor" style="width: 100px; height: 35px; border: 1px solid #444; border-radius: 6px; padding: 2px; cursor: pointer;">
+                    <div id="colorPickerContainer" style="display: flex; gap: 8px; margin-top: 5px;">
+                        <input type="hidden" id="catColor" value="#ffeb3b">
+                        <div class="color-swatch" data-color="#ffeb3b" style="background-color: #ffeb3b;" onclick="selectColor(this)"></div>
+                        <div class="color-swatch" data-color="#00e5ff" style="background-color: #00e5ff;" onclick="selectColor(this)"></div>
+                        <div class="color-swatch" data-color="#ff4081" style="background-color: #ff4081;" onclick="selectColor(this)"></div>
+                        <div class="color-swatch" data-color="#66bb6a" style="background-color: #66bb6a;" onclick="selectColor(this)"></div>
+                        <div class="color-swatch" data-color="#ff9800" style="background-color: #ff9800;" onclick="selectColor(this)"></div>
+                    </div>
                 </div>
             </div>
             <div id="eventListEditor">
@@ -293,6 +304,11 @@ button:hover {
             <button class="close-btn" onclick="closeManageModal()">×</button>
         </div>
         <div class="modal-body" id="categoryListContainer" style="padding:0"></div>
+        <div style="padding: 15px; border-top: 1px solid var(--border-color); text-align: center;">
+            <button class="btn-admin" style="width: 100%; font-size: 1rem; padding: 12px; border-radius: 8px;" onclick="openCategoryModal()">
+                Thêm lịch mới
+            </button>
+        </div>
     </div>
 </div>
 
@@ -368,8 +384,8 @@ function getTietKhi(d, m, y) {
 // --- USER DATA MANAGEMENT ---
 const DEFAULT_CATEGORIES = [
     { id: '1', name: 'Sinh Nhật', type: 'SOLAR', visible: true, color: '#ffeb3b', events: { "19/5": "Sinh nhật Bác ❤️"} },
-    { id: '2', name: 'Lễ Dương Lịch', type: 'SOLAR', visible: true, color: '#00e5ff', events: { "1/1": "Tết Dương", "30/4": "Thống nhất đất nước", "1/5": "QT Lao động", "2/9": "Quốc khánh" } },
-    { id: '3', name: 'Lễ Âm Lịch', type: 'LUNAR', visible: true, color: '#ff4081', events: { "1/1": "Mùng 1 Tết", "15/1": "Rằm Tháng Giêng", "10/3": "Giỗ Tổ Hùng Vương", "15/8": "Trung Thu" } }
+    { id: '2', name: 'Lễ Dương Lịch', type: 'SOLAR', visible: true, color: '#00e5ff', events: { "1/1": "Tết Dương Lịch", "30/4": "Thống nhất đất nước", "1/5": "Quốc tế Lao động", "2/9": "Quốc Khánh" } },
+    { id: '3', name: 'Lễ Âm Lịch', type: 'LUNAR', visible: true, color: '#ff4081', events: { "1/1": "Mùng 1 Tết", "15/1": "Rằm Tháng Giêng", "10/3": "Giỗ Tổ Hùng Vương", "15/8": "Trung Thu", "15/4": "Phật Đản" } }
 ];
 
 let userCategories = JSON.parse(localStorage.getItem('vn_calendar_data')) || DEFAULT_CATEGORIES;
@@ -422,11 +438,11 @@ function displayDateInfo(date) {
     
     const prevDate = new Date(y, m - 1, d - 1);
     if (tkToday !== getTietKhi(prevDate.getDate(), prevDate.getMonth() + 1, prevDate.getFullYear())) {
-        holidayBox.innerHTML += `<div class="holiday-item" style="color:#fcea32;">🌿 TIẾT ${tkToday.toUpperCase()}</div>`;
+        holidayBox.innerHTML += `<div class="holiday-item">🌿 TIẾT ${tkToday.toUpperCase()}</div>`;
     }
 
-    getEventsAt(d, m, y, false).forEach(ev => holidayBox.innerHTML += `<div class="holiday-item" style="color:${ev.color}">⭐ ${ev.name}</div>`);
-    getEventsAt(d, m, y, true, lun).forEach(ev => holidayBox.innerHTML += `<div class="holiday-item" style="color:${ev.color}">🌙 ${ev.name}</div>`);
+    getEventsAt(d, m, y, false).forEach(ev => holidayBox.innerHTML += `<div class="holiday-item" style="color:#ffd964">⭐️ ${ev.name}</div>`);
+    getEventsAt(d, m, y, true, lun).forEach(ev => holidayBox.innerHTML += `<div class="holiday-item" style="color:#fff">🌙 ${ev.name}</div>`);
 }
 
 function render() {
@@ -470,6 +486,15 @@ function render() {
 }
 
 // --- ADMIN UI LOGIC ---
+
+function selectColor(element) {
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+        swatch.classList.remove('active');
+    });
+    element.classList.add('active');
+    document.getElementById('catColor').value = element.getAttribute('data-color');
+}
+
 function openCategoryModal(catId = null) {
     closeManageModal(); 
     
@@ -477,21 +502,41 @@ function openCategoryModal(catId = null) {
     const container = document.getElementById('eventListEditor');
     container.innerHTML = '';
     
+    let targetColor = '#ffeb3b';
+    
     if (catId) {
         const cat = userCategories.find(c => c.id === catId);
         document.getElementById('editCatId').value = cat.id;
         document.getElementById('catName').value = cat.name;
         document.getElementById('catType').value = cat.type;
-        document.getElementById('catColor').value = cat.color || '#ef5350';
+        targetColor = cat.color || '#ffeb3b';
+        
         Object.entries(cat.events).forEach(([date, name]) => addNewEventRow(date, name));
-        document.getElementById('catModalTitle').innerText = "Chỉnh sửa đề mục";
+        document.getElementById('catModalTitle').innerText = "Chỉnh sửa lịch";
     } else {
         document.getElementById('editCatId').value = '';
         document.getElementById('catName').value = '';
-        document.getElementById('catColor').value = '#ef5350';
+        targetColor = '#ffeb3b';
         addNewEventRow();
         document.getElementById('catModalTitle').innerText = "Thêm lịch mới";
     }
+    
+    document.getElementById('catColor').value = targetColor;
+    const swatches = document.querySelectorAll('.color-swatch');
+    let found = false;
+    swatches.forEach(s => {
+        s.classList.remove('active');
+        if(s.getAttribute('data-color') === targetColor) {
+            s.classList.add('active');
+            found = true;
+        }
+    });
+    
+    if(!found && swatches.length > 0) {
+        swatches[0].classList.add('active');
+        document.getElementById('catColor').value = swatches[0].getAttribute('data-color');
+    }
+    
     modal.style.display = 'block';
 }
 
@@ -578,7 +623,7 @@ function exportData() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(userCategories));
     const dlAnchor = document.createElement('a');
     dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "lich_viet_data.json");
+    dlAnchor.setAttribute("download", "lich_Tu_An.json");
     dlAnchor.click();
     dlAnchor.remove();
 }
@@ -719,38 +764,27 @@ function hideUpcomingEvents() { document.getElementById('eventsPopup').style.dis
     for(let i=0; i<12; i++) sel.add(new Option(`Tháng ${i+1}`, i));
     displayDateInfo(new Date());
     render();
-    setInterval(updateClock, 1000);
-    updateClock();
 })();
 
-// Chức năng xuất toàn bộ trang web ra file HTML
 function exportFullHTML() {
-    // Lấy toàn bộ nội dung HTML hiện tại
     const htmlContent = document.documentElement.outerHTML;
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Lich_Van_Nien_Pro_Backup.html';
+    a.download = 'Lich_Tu_An_Backup.html';
     document.body.appendChild(a);
     a.click();
     
-    // Dọn dẹp
     setTimeout(() => {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
     }, 0);
 }
 
-// Chức năng hiển thị/ẩn Popup Giới thiệu
-function showAboutPopup() {
-    document.getElementById('aboutPopup').style.display = 'block';
-}
-
-function hideAboutPopup() {
-    document.getElementById('aboutPopup').style.display = 'none';
-}
+function showAboutPopup() { document.getElementById('aboutPopup').style.display = 'block'; }
+function hideAboutPopup() { document.getElementById('aboutPopup').style.display = 'none'; }
 </script>
 </body>
 </html>
