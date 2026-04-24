@@ -5,8 +5,8 @@
     <title>Tra cứu và nhắc nhớ NTN</title>
     <style>
         :root {
-            --primary: #ef5350;
-            --secondary: #64b5f6;
+            --primary: #ff5c94;
+            --secondary: #81c678;
             --bg: #121212;
             --success: #66bb6a;
             --lunar-special: #282828;
@@ -22,7 +22,7 @@
             --color-solar: #00e5ff;
             --color-lunar: #ff4081;
             --color-birthday: #ffeb3b;
-            --color-tet: #ff9800;
+            --color-tet: #3d4638;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -43,14 +43,10 @@
         .today-canchi { font-size: 1rem; margin-top: 15px; opacity: 0.85; font-weight: 400; line-height: 1.3; }
         
         .holiday-container { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; align-items: center; }
-        .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; 
-            background: #5c8200;
-        }
+        .holiday-item { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: #5c8200; }
         
         .header { background: var(--box-bg); color: #71b6f8; padding: 12px 15px; border-bottom: 1px solid var(--border-color); display: none; justify-content: center; align-items: center; position: relative; }
-        .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px;
-            color: yellow;
-         }
+        .header h2 { margin: 0; font-size: 1.1rem; letter-spacing: 1px; color: yellow; }
 
         .controls { padding: 12px; background: var(--box-bg); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 10px; }
         .control-row { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
@@ -64,24 +60,36 @@
         button:active { opacity: 0.6; }
         .btn-nav { color: var(--primary); border-color: #727272; min-width: 35px; }
         
-        .action-group { display: flex; width: 100%; gap: 6px; }
-        .action-group button { flex: 1; padding: 10px 2px; font-size: 0.75rem; border: none; white-space: nowrap; }
+        /* Đồng bộ CSS cho 2 nhóm nút trên và dưới */
+        .action-group, .admin-controls { display: flex; width: 100%; gap: 8px; justify-content: center; }
+        .admin-controls { margin-top: 15px; max-width: 450px; }
+        .action-group button, .admin-controls > button {
+            flex: 1;
+            padding: 12px 4px;
+            font-size: 0.85rem;
+            border: 1px #768d78 solid;
+            border-radius: 8px;
+            white-space: nowrap;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
         .btn-today { background: var(--secondary); color: white; }
-        .btn-event { background: #e91e63; color: white; }
+        .btn-event { background: #3d4638; color: white; }
         .btn-tet { background: var(--color-tet); color: white; }
-        .btn-leap { background: var(--success); color: white; }
-        .btn-tietkhi { background: #7e57c2; color: white; }
+        .btn-leap { background: #3d4638; color: white; }
+        .btn-tietkhi { background: #3d4638; color: white; }
 
         .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--grid-header-bg); text-align: center; font-weight: bold; font-size: 0.75rem; padding: 10px 0; color: var(--text-muted); }
         .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
         .cell { aspect-ratio: 1/1; border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; }
         .solar { font-size: 1.1rem; font-weight: 600; z-index: 2; }
         .lunar { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; z-index: 2; }
-        .sun { color: var(--primary); }
-        .sat { color: var(--secondary); }
-        .today { background: var(--today-bg); outline: 2px solid var(--primary); z-index: 5; border-radius: 4px; }
+        .sun { color: #ef1676; }
+        .sat { color: #9ad369; }
+        .today { background: #26361c; outline: 1px solid #5b784e; z-index: 5; border-radius: 4px; }
         
-        .special-text { color: var(--primary); font-weight: bold; }
+        .special-text { color: #ef1676; font-weight: bold; }
         .special-bg { background-color: var(--lunar-special) !important; }
         .selected-cell { background: var(--selected-bg) !important; }
         .empty { background: var(--empty-bg); }
@@ -90,19 +98,13 @@
         .dot { width: 4px; height: 4px; border-radius: 50%; }
         .dot-tietkhi { background-color: #ffffff; }
 
-        /* Admin Controls */
-        .admin-controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px; width: 100%; max-width: 450px; }
         .btn-admin { background: #455a64; color: white; border: none; padding: 10px 2px; font-size: 0.75rem; border-radius: 8px; flex: 1; text-align: center; }
 
         .event-row { display: flex; gap: 5px; margin-bottom: 8px; align-items: center; }
         .event-row input[type="text"] {padding: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: #fff; border-radius: 4px; }
-        input.ev-date {
-            width: 60px;
-        }
-        input.ev-name {
-            flex: 1;
-        }
-        .btn-del { background: var(--primary); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        input.ev-date { width: 60px; }
+        input.ev-name { flex: 1; }
+        .btn-del { background: #444444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
 
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -117,7 +119,7 @@
         /* Modals */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; backdrop-filter: blur(5px); }
         .modal-content { position: relative; background: var(--box-bg); margin: 5% auto; width: 92%; max-width: 500px; max-height: 85vh; border-radius: 15px; border: 1px solid var(--border-color); overflow-y: auto; }
-        .modal-header { padding: 15px; background: var(--grid-header-bg); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1; }
+        .modal-header { padding: 15px; background: #2f392a; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1; }
         .modal-body { padding: 15px; }
         .close-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
         
@@ -126,59 +128,20 @@
         td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); text-align: center; color: var(--text-main); }
         .highlight-leap { background-color: rgba(102, 187, 106, 0.15) !important; border-left: 4px solid var(--success); }
 
-        /* Style cho icon SVG trong button (Chỉ giữ lại cho nút điều hướng) */
-        button svg {
-            vertical-align: middle;
-            fill: none;
-            stroke: rgb(208 208 208);
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
+        button svg { vertical-align: middle; fill: none; stroke: rgb(208 208 208); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .btn-nav svg { width: 26px; height: 26px; }
 
-        /* Hiệu ứng hover cho nút chuyên nghiệp hơn */
-        button:hover {
-            filter: brightness(1.2);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .modal-body li {
-            padding: 6px;
-            font-size: 1rem;
-        }
-        .modal-body h4 {
-            font-size: 1rem;
-        }
-        .modal-body table {
-            font-size: 1rem;
-        }
+        button:hover { filter: brightness(1.2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .modal-body li { padding: 6px; font-size: 1rem; }
+        .modal-body h4 { font-size: 1rem; }
+        .modal-body table { font-size: 1rem; }
 
-        /* Style cho bảng chọn màu fix sẵn */
-        .color-swatch {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s ease;
-            display: inline-block;
-        }
-        .color-swatch:hover {
-            transform: scale(1.1);
-        }
-        .color-swatch.active {
-            border-color: #ffffff;
-            transform: scale(1.15);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-        }
-
-        .info p{
-            color: #cdcdcd;
-        }
+        .color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; display: inline-block; }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.active { border-color: #ffffff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+        .info p { color: #eaeaea; }
     </style>
-<link type="text/css" rel="stylesheet" id="dark-mode-custom-link"><link type="text/css" rel="stylesheet" id="dark-mode-general-link"><style lang="en" type="text/css" id="dark-mode-custom-style"></style><style lang="en" type="text/css" id="dark-mode-native-style"></style><style lang="en" type="text/css" id="dark-mode-native-sheet"></style></head>
+</head>
 <body>
 
 <div class="calendar-box">
@@ -193,34 +156,22 @@
 
     <div class="header">
         <h2 id="monthTitle">THÁNG 4 / 2026</h2>
-       
     </div>
     
     <div class="controls">
-    
-    <div class="action-group">
-        <button class="btn-tet" onclick="goToTet()">
-          TẾT
-        </button>
-        <button class="btn-event" onclick="showUpcomingEvents()">
-         SỰ KIỆN
-        </button>
-        <button class="btn-today" onclick="goToday()" style="background-color: #0082ff;">
-          HÔM NAY
-        </button>
-        
-        <button class="btn-leap" onclick="openLeapModal()">
-            NHUẬN
-        </button>
-        <button class="btn-tietkhi" onclick="showTietKhiPopup()">
-        TIẾT KHÍ
-        </button>
-    </div>
+        <div class="action-group">
+            <button class="btn-tet" onclick="goToTet()">TẾT</button>
+            <button class="btn-today" onclick="goToday()" style="background-color: #59995c;">HÔM NAY</button>
+            <button class="btn-event" onclick="showUpcomingEvents()">SỰ KIỆN</button>
+            
+        </div>
 
-            <div class="control-row">
+        <div class="control-row">
             <div class="group-item">
                 <button class="btn-nav" onclick="changeMonth(-1)"><svg><polyline points="15 18 9 12 15 6"></polyline></svg></button>
-                <select id="selMonth" onchange="jump()"><option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option><option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option><option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option></select>
+                <select id="selMonth" onchange="jump()">
+                    <option value="0">Tháng 1</option><option value="1">Tháng 2</option><option value="2">Tháng 3</option><option value="3">Tháng 4</option><option value="4">Tháng 5</option><option value="5">Tháng 6</option><option value="6">Tháng 7</option><option value="7">Tháng 8</option><option value="8">Tháng 9</option><option value="9">Tháng 10</option><option value="10">Tháng 11</option><option value="11">Tháng 12</option>
+                </select>
                 <button class="btn-nav" onclick="changeMonth(1)"><svg><polyline points="9 18 15 12 9 6"></polyline></svg></button>
             </div>
 
@@ -233,136 +184,14 @@
     </div>
 
     <div class="weekdays"><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="sat">T7</div><div class="sun">CN</div></div>
-    <div id="grid" class="days-grid"><div class="cell empty"></div><div class="cell empty"></div><div class="cell   ">
-            <div class="solar ">1</div>
-            <div class="lunar ">14</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell  special-bg ">
-            <div class="solar ">2</div>
-            <div class="lunar special-text">15</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">3</div>
-            <div class="lunar ">16</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sat">4</div>
-            <div class="lunar ">17</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sun">5</div>
-            <div class="lunar ">18</div>
-            <div class="indicator-container"><div class="dot dot-tietkhi"></div></div>
-        </div><div class="cell   ">
-            <div class="solar ">6</div>
-            <div class="lunar ">19</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">7</div>
-            <div class="lunar ">20</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">8</div>
-            <div class="lunar ">21</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">9</div>
-            <div class="lunar ">22</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">10</div>
-            <div class="lunar ">23</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sat">11</div>
-            <div class="lunar ">24</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sun">12</div>
-            <div class="lunar ">25</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">13</div>
-            <div class="lunar ">26</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">14</div>
-            <div class="lunar ">27</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">15</div>
-            <div class="lunar ">28</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">16</div>
-            <div class="lunar ">29</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell  special-bg ">
-            <div class="solar ">17</div>
-            <div class="lunar special-text">1/3</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sat">18</div>
-            <div class="lunar ">2</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sun">19</div>
-            <div class="lunar ">3</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">20</div>
-            <div class="lunar ">4</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">21</div>
-            <div class="lunar ">5</div>
-            <div class="indicator-container"><div class="dot dot-tietkhi"></div></div>
-        </div><div class="cell   ">
-            <div class="solar ">22</div>
-            <div class="lunar ">6</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">23</div>
-            <div class="lunar ">7</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell today  selected-cell">
-            <div class="solar ">24</div>
-            <div class="lunar ">8</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sat">25</div>
-            <div class="lunar ">9</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar sun">26</div>
-            <div class="lunar ">10</div>
-            <div class="indicator-container"><div class="dot" style="background-color:#ff4081"></div></div>
-        </div><div class="cell   ">
-            <div class="solar ">27</div>
-            <div class="lunar ">11</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">28</div>
-            <div class="lunar ">12</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">29</div>
-            <div class="lunar ">13</div>
-            <div class="indicator-container"></div>
-        </div><div class="cell   ">
-            <div class="solar ">30</div>
-            <div class="lunar ">14</div>
-            <div class="indicator-container"><div class="dot" style="background-color:#00e5ff"></div></div>
-        </div></div>
+    <div id="grid" class="days-grid">
+        </div>
 </div>
 
 <div class="admin-controls">
-
-    <button class="btn-admin" onclick="exportData()">Xuất</button>
-    <button class="btn-admin" onclick="importData()">Nhập</button>
-    <button class="btn-admin" onclick="openManageModal()" style="background-color: #0082ff;">Quản lý</button>
-    <button class="btn-admin" onclick="exportFullHTML()">Sao lưu</button>
-    <button class="btn-admin" onclick="showAboutPopup()">Giới thiệu</button>
+    <button class="btn-tietkhi" onclick="showTietKhiPopup()">TIẾT KHÍ</button>
+    <button class="btn-admin" onclick="openManageModal()" style="background-color: #3d4638;">QUẢN LÝ</button>
+    <button class="btn-leap" onclick="openLeapModal()">NHUẬN</button>
 </div>
 
 <div id="aboutPopup" class="modal-overlay" onclick="hideAboutPopup()" style="display: none;">
@@ -373,7 +202,6 @@
         </div>
         <div class="modal-body info" style="line-height: 1.6; text-align: justify;">
             <p>Là một công cụ lịch trực tuyến giúp người dùng tra cứu ngày tháng âm – dương một cách nhanh chóng và thuận tiện. Cho phép ghi nhớ các ngày kỷ niệm hằng năm theo cả âm lịch và dương lịch, rất phù hợp để lưu lại những ngày quan trọng như sinh nhật, ngày lễ, ngày giỗ, ngày kỷ niệm gia đình… <br><br>Người dùng có thể phân loại sự kiện theo từng mục rõ ràng, giúp việc quản lý và theo dõi các dịp quan trọng trở nên dễ dàng hơn — một tiện ích mà nhiều ứng dụng lịch phổ biến hiện nay chưa hỗ trợ tốt đối với lịch âm.<br><br>
-            
             Ngoài ra, trang web còn hỗ trợ sao lưu và khôi phục dữ liệu, giúp người dùng bảo vệ và chuyển đổi thông tin lịch cá nhân khi cần.  Với giao diện đơn giản, nhẹ và chạy trực tiếp trên trình duyệt, đây là một giải pháp hữu ích để quản lý lịch cá nhân tiện lợi và bảo mật.</p>
             <div style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.8rem;">
                 Phiên bản 1.0.0 © 2026
@@ -382,10 +210,11 @@
     </div>
 </div>
 
-<div id="categoryModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
+<div id="categoryModal" class="modal-overlay" onclick="closeCategoryModal()" style="display: none;">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
-            <h3 id="catModalTitle">Chỉnh sửa lịch</h3>
+            <button class="close-btn" onclick="closeCategoryModal(); openManageModal();" title="Quay lại">←</button>
+            <h3 id="catModalTitle" style="flex: 1; text-align: center; margin: 0;">Chỉnh sửa lịch</h3>
             <button class="close-btn" onclick="closeCategoryModal()">×</button>
         </div>
         <div class="modal-body">
@@ -414,94 +243,32 @@
                     </div>
                 </div>
             </div>
-            <div id="eventListEditor"><div class="event-row">
-        <input type="text" placeholder="VD: 14/7" value="19/7" class="ev-date">
-        <input type="text" placeholder="Tên kỷ niệm" value="Giỗ cụ Bà Nguyễn Thị Miên (1924 - 1977)" class="ev-name">
-        <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
-    </div><div class="event-row">
-        <input type="text" placeholder="VD: 14/7" value="19/12" class="ev-date">
-        <input type="text" placeholder="Tên kỷ niệm" value="Giỗ cụ Ông Lê Văn Dy ( 1922 - 1991)" class="ev-name">
-        <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
-    </div><div class="event-row">
-        <input type="text" placeholder="VD: 14/7" value="25/9" class="ev-date">
-        <input type="text" placeholder="Tên kỷ niệm" value="Giỗ ông Cậu Lê Văn Tiến (1953 - 2018)" class="ev-name">
-        <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
-    </div><div class="event-row">
-        <input type="text" placeholder="VD: 14/7" value="8/10" class="ev-date">
-        <input type="text" placeholder="Tên kỷ niệm" value="Giỗ cụ Lê Văn Bao" class="ev-name">
-        <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
-    </div><div class="event-row">
-        <input type="text" placeholder="VD: 14/7" value="6/6" class="ev-date">
-        <input type="text" placeholder="Tên kỷ niệm" value="Giỗ cụ Lê Văn Lãm (1897 - 1976)" class="ev-name">
-        <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
-    </div><div class="event-row">
-        <input type="text" placeholder="VD: 14/7" value="29/3" class="ev-date">
-        <input type="text" placeholder="Tên kỷ niệm" value="Giỗ cụ Phạm Thị Ở (vợ cả cụ Bao)" class="ev-name">
-        <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
-    </div></div>
-            <button class="btn-today" style="width:100%; margin-top:10px" onclick="addNewEventRow()">+ Thêm ngày</button>
+            <div id="eventListEditor"></div>
+            <button class="btn-today" style="width:100%; margin-top:10px; text-transform: uppercase;" onclick="addNewEventRow()">+ Thêm ngày</button>
             <hr style="border:0; border-top:1px solid #444; margin:20px 0;">
-            <button class="btn-leap" style="width:100%; padding:12px" onclick="saveCategory()">CẬP NHẬT LƯU TRỮ</button>
+            <button class="btn-leap" style="width:100%; padding:12px; font-weight: bold;" onclick="saveCategory()">CẬP NHẬT LƯU TRỮ</button>
         </div>
     </div>
 </div>
 
-<div id="manageModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
+<div id="manageModal" class="modal-overlay" onclick="closeManageModal()" style="display: none;">
+    <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-header">
             <h3>Danh Sách Lịch</h3>
             <button class="close-btn" onclick="closeManageModal()">×</button>
         </div>
-        <div class="modal-body" id="categoryListContainer" style="padding:0"><div class="category-item">
-            <div onclick="openCategoryModal('1')" style="flex:1">
-                <div style="font-weight:bold; display:flex; align-items:center; gap:8px;">
-                    <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:#ffeb3b; border: 1px solid #444;"></span>
-                    Sinh Nhật
-                </div>
-                <small style="opacity:0.6">Dương lịch (1 kỷ niệm)</small>
-            </div>
-            <div style="display:flex; gap:12px; align-items:center">
-                <label class="switch">
-                    <input type="checkbox" checked="" onchange="toggleVisibility('1')">
-                    <span class="slider"></span>
-                </label>
-                <button class="btn-del" onclick="deleteCategory('1')">🗑️</button>
-            </div>
-        </div><div class="category-item">
-            <div onclick="openCategoryModal('2')" style="flex:1">
-                <div style="font-weight:bold; display:flex; align-items:center; gap:8px;">
-                    <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:#00e5ff; border: 1px solid #444;"></span>
-                    Lễ Dương Lịch
-                </div>
-                <small style="opacity:0.6">Dương lịch (4 kỷ niệm)</small>
-            </div>
-            <div style="display:flex; gap:12px; align-items:center">
-                <label class="switch">
-                    <input type="checkbox" checked="" onchange="toggleVisibility('2')">
-                    <span class="slider"></span>
-                </label>
-                <button class="btn-del" onclick="deleteCategory('2')">🗑️</button>
-            </div>
-        </div><div class="category-item">
-            <div onclick="openCategoryModal('3')" style="flex:1">
-                <div style="font-weight:bold; display:flex; align-items:center; gap:8px;">
-                    <span style="display:inline-block; width:12px; height:12px; border-radius:50%; background-color:#ff4081; border: 1px solid #444;"></span>
-                    Lễ Âm Lịch
-                </div>
-                <small style="opacity:0.6">Âm lịch (5 kỷ niệm)</small>
-            </div>
-            <div style="display:flex; gap:12px; align-items:center">
-                <label class="switch">
-                    <input type="checkbox" checked="" onchange="toggleVisibility('3')">
-                    <span class="slider"></span>
-                </label>
-                <button class="btn-del" onclick="deleteCategory('3')">🗑️</button>
-            </div>
-        </div></div>
-        <div style="padding: 15px; border-top: 1px solid var(--border-color); text-align: center;">
-            <button class="btn-admin" style="width: 100%; font-size: 1rem; padding: 12px; border-radius: 8px;" onclick="openCategoryModal()">
-                Thêm lịch mới
+        <div class="modal-body" id="categoryListContainer" style="padding:0"></div>
+        
+        <div style="padding: 15px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px;">
+            <button class="btn-admin" style="width: 100%; font-size: 1rem; padding: 12px; border-radius: 8px; background-color: var(--success); font-weight: bold;" onclick="openCategoryModal()">
+                + Thêm lịch mới
             </button>
+            <div style="display: flex; gap: 6px; justify-content: space-between; width: 100%;">
+                <button class="btn-admin" onclick="exportData()" style="flex: 1;">Xuất</button>
+                <button class="btn-admin" onclick="importData()" style="flex: 1;">Nhập</button>
+                <button class="btn-admin" onclick="exportFullHTML()" style="flex: 1;">Sao lưu</button>
+                <button class="btn-admin" onclick="showAboutPopup()" style="flex: 1;">Giới thiệu</button>
+            </div>
         </div>
     </div>
 </div>
@@ -521,7 +288,7 @@
                 <thead style="position: sticky; top: 0; background: var(--grid-header-bg); z-index: 10;">
                     <tr><th>Kỷ niệm</th><th>Ngày</th><th>Còn lại</th></tr>
                 </thead>
-                <tbody><tr><td style="text-align:left; padding-left:15px; color:#ff9800; font-weight:bold">Giỗ ông Cậu Lê Văn Tiến (1953 - 2018)</td><td>25/9 (AL)</td><td style="color:var(--success)">2 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Nguyễn Huy ❤️</td><td>11/11 (DL)</td><td style="color:var(--success)">10 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Nguyễn Lê Trung Hiếu ❤️</td><td>13/11 (DL)</td><td style="color:var(--success)">12 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Trần Ngọc Quỳnh ❤️</td><td>14/11 (DL)</td><td style="color:var(--success)">13 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff9800; font-weight:bold">Giỗ cụ Huệ vợ cụ Lãm (1896 - 1985)</td><td>8/10 (AL)</td><td style="color:var(--success)">15 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Phạm Thuỳ Linh ❤️</td><td>21/11 (DL)</td><td style="color:var(--success)">20 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Nguyễn Thanh Hằng ❤️</td><td>24/11 (DL)</td><td style="color:var(--success)">23 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Lê Khánh Toàn ❤️</td><td>1/12 (DL)</td><td style="color:var(--success)">30 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Trần Tuấn Hưng ❤️</td><td>10/12 (DL)</td><td style="color:var(--success)">39 ngày</td></tr><tr><td style="text-align:left; padding-left:15px; color:#ff4081; font-weight:bold">Sinh nhật Trần Quý Anh ❤️</td><td>14/12 (DL)</td><td style="color:var(--success)">43 ngày</td></tr></tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -633,8 +400,6 @@ function getEventsAt(d, m, y, isLunar = false, lunObj = null) {
             if (cat.events[key]) {
                 if (isLunar && lunObj.isLeap) return;
                 let fallbackColor = isLunar ? '#ff4081' : '#00e5ff';
-                
-                // Xử lý đọc cả dạng mảng (mới) và dạng chuỗi (cũ)
                 let evData = cat.events[key];
                 let namesArray = Array.isArray(evData) ? evData : [evData];
                 
@@ -723,23 +488,19 @@ function render() {
 // --- ADMIN UI LOGIC ---
 
 function selectColor(element) {
-    document.querySelectorAll('.color-swatch').forEach(swatch => {
-        swatch.classList.remove('active');
-    });
+    document.querySelectorAll('.color-swatch').forEach(swatch => swatch.classList.remove('active'));
     element.classList.add('active');
     document.getElementById('catColor').value = element.getAttribute('data-color');
 }
 
 function openCategoryModal(catId = null) {
-    // Tự động đóng bảng quản lý khi mở chi tiết
     closeManageModal(); 
-    
     const modal = document.getElementById('categoryModal');
-    const title = document.getElementById('catModalTitle'); // ID đúng là catModalTitle
-    const container = document.getElementById('eventListEditor'); // ID đúng là eventListEditor
+    const title = document.getElementById('catModalTitle');
+    const container = document.getElementById('eventListEditor');
     container.innerHTML = '';
     
-    let targetColor = '#ffeb3b'; // Màu mặc định
+    let targetColor = '#ffeb3b';
 
     if (catId) {
         const cat = userCategories.find(c => c.id === catId);
@@ -749,7 +510,6 @@ function openCategoryModal(catId = null) {
         document.getElementById('catType').value = cat.type;
         targetColor = cat.color || '#ffeb3b';
 
-        // --- LOGIC SẮP XẾP TĂNG DẦN THEO NGÀY/THÁNG ---
         const sortedEntries = Object.entries(cat.events).sort((a, b) => {
             const [d1, m1] = a[0].split('/').map(n => parseInt(n) || 0);
             const [d2, m2] = b[0].split('/').map(n => parseInt(n) || 0);
@@ -757,9 +517,7 @@ function openCategoryModal(catId = null) {
             return d1 - d2;
         });
 
-        // Đổ dữ liệu đã sắp xếp vào danh sách
         sortedEntries.forEach(([date, eventData]) => {
-            // Hỗ trợ cả dữ liệu dạng chuỗi (cũ) và mảng (mới)
             if (Array.isArray(eventData)) {
                 eventData.sort().forEach(name => addNewEventRow(date, name));
             } else {
@@ -773,7 +531,6 @@ function openCategoryModal(catId = null) {
         addNewEventRow();
     }
     
-    // Cập nhật giá trị màu và trạng thái ô chọn màu (Color Swatches)
     document.getElementById('catColor').value = targetColor;
     const swatches = document.querySelectorAll('.color-swatch');
     swatches.forEach(s => {
@@ -790,7 +547,7 @@ function addNewEventRow(date = '', name = '') {
     const div = document.createElement('div');
     div.className = 'event-row';
     div.innerHTML = `
-        <input type="text" placeholder="VD: 14/7" value="${date}" class="ev-date">
+        <input type="text" placeholder="14/7" value="${date}" class="ev-date">
         <input type="text" placeholder="Tên kỷ niệm" value="${name}" class="ev-name">
         <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
     `;
@@ -810,10 +567,8 @@ function saveCategory() {
         const d = row.querySelector('.ev-date').value.trim();
         const n = row.querySelector('.ev-name').value.trim();
         if (d && n) {
-            if (!events[d]) {
-                events[d] = []; // Khởi tạo mảng nếu ngày này chưa có sự kiện
-            }
-            events[d].push(n); // Thêm sự kiện vào mảng của ngày đó
+            if (!events[d]) events[d] = [];
+            events[d].push(n);
         }
     });
 
@@ -834,7 +589,6 @@ function openManageModal() {
     container.innerHTML = '';
     
     userCategories.forEach(cat => {
-        // Đếm tổng số kỷ niệm (bao gồm cả các ngày trùng nhau)
         let totalEvents = 0;
         Object.values(cat.events).forEach(val => {
             totalEvents += Array.isArray(val) ? val.length : 1;
@@ -939,14 +693,10 @@ function openLeapModal() {
     });
     
     modal.style.display = 'block';
-    setTimeout(() => {
-        document.getElementById('closestRow')?.scrollIntoView({behavior:'smooth', block:'center'});
-    }, 50);
+    setTimeout(() => document.getElementById('closestRow')?.scrollIntoView({behavior:'smooth', block:'center'}), 50);
 }
 
-function closeLeapModal() {
-    document.getElementById('leapModal').style.display = 'none';
-}
+function closeLeapModal() { document.getElementById('leapModal').style.display = 'none'; }
 
 function showUpcomingEvents() {
     const tbody = document.querySelector('#eventsTable tbody');
@@ -971,51 +721,57 @@ function showTietKhiPopup() {
         <div style="font-size:0.85rem">
             <h4 style="color:var(--success)">🌸 Mùa Xuân (Từ tháng 2)</h4>
         <ul>
-                    <li><b>Lập Xuân:</b> 04/02 - 05/02: Bắt đầu mùa xuân.</li>
-                    <li><b>Vũ Thủy:</b> 18/02 - 19/02: Mưa ẩm bắt đầu rơi.</li>
-                    <li><b>Kinh Trập:</b> 05/03 - 06/03: Sâu bọ tỉnh giấc.</li>
-                    <li><b>Xuân Phân:</b> 20/03 - 21/03: Giữa mùa xuân, ngày đêm bằng nhau.</li>
-                    <li><b>Thanh Minh:</b> 04/04 - 05/04: Trời trong sáng, tảo mộ.</li>
-                    <li><b>Cốc Vũ:</b> 20/04 - 21/04: Mưa rào cho ngũ cốc.</li>
-                </ul>
+            <li><b>Lập Xuân:</b> 04/02 - 05/02: Bắt đầu mùa xuân.</li>
+            <li><b>Vũ Thủy:</b> 18/02 - 19/02: Mưa ẩm bắt đầu rơi.</li>
+            <li><b>Kinh Trập:</b> 05/03 - 06/03: Sâu bọ tỉnh giấc.</li>
+            <li><b>Xuân Phân:</b> 20/03 - 21/03: Giữa mùa xuân, ngày đêm bằng nhau.</li>
+            <li><b>Thanh Minh:</b> 04/04 - 05/04: Trời trong sáng, tảo mộ.</li>
+            <li><b>Cốc Vũ:</b> 20/04 - 21/04: Mưa rào cho ngũ cốc.</li>
+        </ul>
             <h4 style="color:var(--color-tet)">☀️ Mùa Hạ (Từ tháng 5)</h4>
         <ul>
-                    <li><b>Lập Hạ:</b> 05/05 - 06/05: Bắt đầu mùa hè.</li>
-                    <li><b>Tiểu Mãn:</b> 21/05 - 22/05: Lũ nhỏ, lúa chín.</li>
-                    <li><b>Mang Chủng:</b> 05/06 - 06/06: Gieo mạ.</li>
-                    <li><b>Hạ Chí:</b> 21/06 - 22/06: Ngày dài nhất năm.</li>
-                    <li><b>Tiểu Thử:</b> 07/07 - 08/07: Nóng nhẹ.</li>
-                    <li><b>Đại Thử:</b> 22/07 - 23/07: Nóng nhất năm.</li>
-                </ul>
+            <li><b>Lập Hạ:</b> 05/05 - 06/05: Bắt đầu mùa hè.</li>
+            <li><b>Tiểu Mãn:</b> 21/05 - 22/05: Lũ nhỏ, lúa chín.</li>
+            <li><b>Mang Chủng:</b> 05/06 - 06/06: Gieo mạ.</li>
+            <li><b>Hạ Chí:</b> 21/06 - 22/06: Ngày dài nhất năm.</li>
+            <li><b>Tiểu Thử:</b> 07/07 - 08/07: Nóng nhẹ.</li>
+            <li><b>Đại Thử:</b> 22/07 - 23/07: Nóng nhất năm.</li>
+        </ul>
             <h4 style="color:var(--color-lunar)">🍂 Mùa Thu (Từ tháng 8)</h4>
         <ul>
-                    <li><b>Lập Thu:</b> 07/08 - 08/08: Bắt đầu mùa thu.</li>
-                    <li><b>Xử Thử:</b> 23/08 - 24/08: Nóng bức lui dần.</li>
-                    <li><b>Bạch Lộ:</b> 07/09 - 08/09: Có sương rơi.</li>
-                    <li><b>Thu Phân:</b> 22/09 - 23/09: Giữa thu, ngày đêm bằng nhau.</li>
-                    <li><b>Hàn Lộ:</b> 08/10 - 09/10: Sương bắt đầu lạnh.</li>
-                    <li><b>Sương Giáng:</b> 23/10 - 24/10: Sương đọng hạt trắng.</li>
-                </ul>
+            <li><b>Lập Thu:</b> 07/08 - 08/08: Bắt đầu mùa thu.</li>
+            <li><b>Xử Thử:</b> 23/08 - 24/08: Nóng bức lui dần.</li>
+            <li><b>Bạch Lộ:</b> 07/09 - 08/09: Có sương rơi.</li>
+            <li><b>Thu Phân:</b> 22/09 - 23/09: Giữa thu, ngày đêm bằng nhau.</li>
+            <li><b>Hàn Lộ:</b> 08/10 - 09/10: Sương bắt đầu lạnh.</li>
+            <li><b>Sương Giáng:</b> 23/10 - 24/10: Sương đọng hạt trắng.</li>
+        </ul>
             <h4 style="color:var(--secondary)">❄️ Mùa Đông (Từ tháng 11)</h4>
         <ul>
-                    <li><b>Lập Đông:</b> 07/11 - 08/11: Bắt đầu mùa đông.</li>
-                    <li><b>Tiểu Tuyết:</b> 22/11 - 23/11: Tuyết rơi nhẹ.</li>
-                    <li><b>Đại Tuyết:</b> 07/12 - 08/12: Tuyết rơi dày.</li>
-                    <li><b>Đông Chí:</b> 21/12 - 22/12: Ngày ngắn nhất năm.</li>
-                    <li><b>Tiểu Hàn:</b> 05/01 - 06/01: Rét nhẹ.</li>
-                    <li><b>Đại Hàn:</b> 20/01 - 21/01: Rét đậm nhất năm.</li>
-                </ul>
+            <li><b>Lập Đông:</b> 07/11 - 08/11: Bắt đầu mùa đông.</li>
+            <li><b>Tiểu Tuyết:</b> 22/11 - 23/11: Tuyết rơi nhẹ.</li>
+            <li><b>Đại Tuyết:</b> 07/12 - 08/12: Tuyết rơi dày.</li>
+            <li><b>Đông Chí:</b> 21/12 - 22/12: Ngày ngắn nhất năm.</li>
+            <li><b>Tiểu Hàn:</b> 05/01 - 06/01: Rét nhẹ.</li>
+            <li><b>Đại Hàn:</b> 20/01 - 21/01: Rét đậm nhất năm.</li>
+        </ul>
         </div>`;
     document.getElementById('tietKhiContent').innerHTML = content;
     document.getElementById('tietKhiPopup').style.display = 'block';
 }
 
 // Initializers
-
 function closeCategoryModal() { document.getElementById('categoryModal').style.display = 'none'; }
 function closeManageModal() { document.getElementById('manageModal').style.display = 'none'; }
 function hideTietKhiPopup() { document.getElementById('tietKhiPopup').style.display = 'none'; }
 function hideUpcomingEvents() { document.getElementById('eventsPopup').style.display = 'none'; }
+
+// Tự động đóng popup Quản lý trước khi mở popup Giới thiệu
+function showAboutPopup() { 
+    closeManageModal();
+    document.getElementById('aboutPopup').style.display = 'block'; 
+}
+function hideAboutPopup() { document.getElementById('aboutPopup').style.display = 'none'; }
 
 (function init() {
     const sel = document.getElementById('selMonth');
@@ -1025,25 +781,19 @@ function hideUpcomingEvents() { document.getElementById('eventsPopup').style.dis
 })();
 
 function exportFullHTML() {
-    // Lấy toàn bộ mã HTML của trang hiện tại và thêm lại thẻ DOCTYPE
     let htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-    
-    // Chuyển đổi dữ liệu userCategories hiện tại thành chuỗi JSON có định dạng đẹp (xuống dòng, lùi lề)
     const newCategoriesJSON = JSON.stringify(userCategories, null, 4);
-    
-    // Tìm mảng DEFAULT_CATEGORIES cũ trong mã nguồn và thay thế bằng dữ liệu mới nhất
     htmlContent = htmlContent.replace(
         /const DEFAULT_CATEGORIES\s*=\s*\[[\s\S]*?\];/, 
         `const DEFAULT_CATEGORIES = ${newCategoriesJSON};`
     );
 
-    // Tạo file HTML và tải xuống
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'Lich_Tu_An_Backup.html'; // Bạn có thể đổi tên file mặc định ở đây nếu muốn
+    a.download = 'Lich_Tu_An_Backup.html'; 
     document.body.appendChild(a);
     a.click();
     
@@ -1052,10 +802,6 @@ function exportFullHTML() {
         window.URL.revokeObjectURL(url);
     }, 0);
 }
-
-function showAboutPopup() { document.getElementById('aboutPopup').style.display = 'block'; }
-function hideAboutPopup() { document.getElementById('aboutPopup').style.display = 'none'; }
 </script>
-
 
 </body></html>
