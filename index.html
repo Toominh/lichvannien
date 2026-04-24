@@ -77,7 +77,7 @@
         .btn-today { background: var(--secondary); color: white; }
         .btn-event { background: #3d4638; color: white; }
         .btn-tet { background: var(--color-tet); color: white; }
-        .btn-leap { background: #3d4638; color: white; }
+        .btn-leap { background: #d13b6e; color: white; font-size:1rem; }
         .btn-tietkhi { background: #3d4638; color: white; }
 
         .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--grid-header-bg); text-align: center; font-weight: bold; font-size: 0.75rem; padding: 10px 0; color: var(--text-muted); }
@@ -98,7 +98,7 @@
         .dot { width: 4px; height: 4px; border-radius: 50%; }
         .dot-tietkhi { background-color: #ffffff; }
 
-        .btn-admin { background: #455a64; color: white; border: none; padding: 10px 2px; font-size: 0.75rem; border-radius: 8px; flex: 1; text-align: center; }
+        .btn-admin { background: #455a64; color: white; border: none; padding: 10px 2px; font-size: 0.9rem; border-radius: 8px; flex: 1; text-align: center; }
 
         .event-row { display: flex; gap: 5px; margin-bottom: 8px; align-items: center; }
         .event-row input[type="text"] {padding: 8px; border: 1px solid var(--border-color); background: var(--input-bg); color: #fff; border-radius: 4px; }
@@ -191,7 +191,7 @@
 <div class="admin-controls">
     <button class="btn-tietkhi" onclick="showTietKhiPopup()">TIẾT KHÍ</button>
     <button class="btn-admin" onclick="openManageModal()" style="background-color: #3d4638;">QUẢN LÝ</button>
-    <button class="btn-leap" onclick="openLeapModal()">NHUẬN</button>
+    <button class="btn-leap" onclick="openLeapModal()" style="background-color: #3d4638;">NHUẬN</button>
 </div>
 
 <div id="aboutPopup" class="modal-overlay" onclick="hideAboutPopup()" style="display: none;">
@@ -244,7 +244,7 @@
                 </div>
             </div>
             <div id="eventListEditor"></div>
-            <button class="btn-today" style="width:100%; margin-top:10px; text-transform: uppercase;" onclick="addNewEventRow()">+ Thêm ngày</button>
+            <button class="btn-today" style="background-color: #658561; width:100%; margin-top:10px; font-size: 1rem; padding: 10px; text-transform: uppercase;" onclick="addNewEventRow()">+ Thêm ngày</button>
             <hr style="border:0; border-top:1px solid #444; margin:20px 0;">
             <button class="btn-leap" style="width:100%; padding:12px; font-weight: bold;" onclick="saveCategory()">CẬP NHẬT LƯU TRỮ</button>
         </div>
@@ -260,7 +260,7 @@
         <div class="modal-body" id="categoryListContainer" style="padding:0"></div>
         
         <div style="padding: 15px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px;">
-            <button class="btn-admin" style="width: 100%; font-size: 1rem; padding: 12px; border-radius: 8px; background-color: var(--success); font-weight: bold;" onclick="openCategoryModal()">
+            <button class="btn-admin" style="width: 100%; font-size: 1rem; padding: 12px; border-radius: 8px; background-color: #658561; font-weight: bold;" onclick="openCategoryModal()">
                 + Thêm lịch mới
             </button>
             <div style="display: flex; gap: 6px; justify-content: space-between; width: 100%;">
