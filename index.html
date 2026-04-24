@@ -84,12 +84,12 @@
         .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
         .cell { aspect-ratio: 1/1; border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; }
         .solar { font-size: 1.1rem; font-weight: 600; z-index: 2; }
-        .lunar { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; z-index: 2; }
-        .sun { color: #ef1676; }
+        .lunar { font-size: 0.9rem; color: var(--text-muted); margin-top: 2px; z-index: 2; }
+        .sun { color: #ef1655; }
         .sat { color: #9ad369; }
         .today { background: #26361c; outline: 1px solid #5b784e; z-index: 5; border-radius: 4px; }
         
-        .special-text { color: #ef1676; font-weight: bold; }
+        .special-text { color: #ef1655; font-weight: bold; }
         .special-bg { background-color: var(--lunar-special) !important; }
         .selected-cell { background: var(--selected-bg) !important; }
         .empty { background: var(--empty-bg); }
@@ -477,7 +477,7 @@ function render() {
 
         cell.innerHTML = `
             <div class="solar ${dow==0?'sun':(dow==6?'sat':'')}">${d}</div>
-            <div class="lunar ${(lun.ld===1||lun.ld===15)?'special-text':''}">${lun.ld === 1 ? lun.ld+'/'+lun.lm : lun.ld}</div>
+            <div class="lunar ${(lun.ld===1||lun.ld===15)?'special-text':''}">${lun.ld === 1 ? lun.ld+' / '+lun.lm : lun.ld}</div>
             <div class="indicator-container">${indicators}</div>
         `;
         cell.onclick = () => { viewDate = new Date(y, m, d); displayDateInfo(viewDate); render(); };
