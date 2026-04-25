@@ -22,7 +22,7 @@
             --color-solar: #00e5ff;
             --color-lunar: #ff4081;
             --color-birthday: #ffeb3b;
-            --color-tet: #3d4638;
+            --color-tet: #ecc30e;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -34,11 +34,11 @@
         
         .calendar-box { background: var(--box-bg); width: 100%; max-width: 450px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden; }
 
-        .today-banner { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px 15px; text-align: center; position: relative; }
+        .today-banner { background: linear-gradient(135deg, #ff5a5a, #61beff); color: white; padding: 20px 15px; text-align: center; position: relative; }
         .today-dow { font-size: 1.5rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 5px; }
         .today-solar { font-size: 5.5rem; font-weight: 900; line-height: 1; margin: 0; text-shadow: 2px 4px 10px rgba(0,0,0,0.3); }
         .today-my { font-size: 1.4rem; font-weight: 700; margin: 5px 0 15px 0; color: #fff; }
-        .today-lunar { font-size: 1.3rem; background: rgba(255,255,255,0.25); padding: 8px 20px; border-radius: 30px; display: inline-block; font-weight: 800; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3); }
+        .today-lunar { font-size: 2rem; background: rgba(255,255,255,0.25); padding: 8px 20px; border-radius: 30px; display: inline-block; font-weight: 800; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);color:#fff; }
         
         .today-canchi { font-size: 1rem; margin-top: 15px; opacity: 0.85; font-weight: 400; line-height: 1.3; }
         
@@ -76,7 +76,7 @@
 
         .btn-today { background: var(--secondary); color: white; }
         .btn-event { background: #3d4638; color: white; }
-        .btn-tet { background: var(--color-tet); color: white; }
+        .btn-tet { background: #3e4637; color: white; }
         .btn-leap { background: #d13b6e; color: white; font-size:1rem; }
         .btn-tietkhi { background: #3d4638; color: white; }
 
@@ -89,7 +89,7 @@
         .sat { color: #9ad369; }
         .today { background: #26361c; outline: 1px solid #5b784e; z-index: 5; border-radius: 4px; }
         
-        .special-text { color: #ef1655; font-weight: bold; }
+        .special-text { color: #ef9a16; font-weight: bold; }
         .special-bg { background-color: var(--lunar-special) !important; }
         .selected-cell { background: var(--selected-bg) !important; }
         .empty { background: var(--empty-bg); }
@@ -134,7 +134,7 @@
         button:hover { filter: brightness(1.2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .modal-body li { padding: 6px; font-size: 1rem; }
         .modal-body h4 { font-size: 1rem; }
-        .modal-body table { font-size: 1rem; }
+        .modal-body table { font-size: 1.2rem; }
 
         .color-swatch { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; display: inline-block; }
         .color-swatch:hover { transform: scale(1.1); }
@@ -423,7 +423,7 @@ function displayDateInfo(date) {
     document.getElementById('tdDow').innerText = days[date.getDay()];
     document.getElementById('tdSolar').innerText = d;
     document.getElementById('tdMonthYear').innerText = `Tháng ${m}, Năm ${y}`;
-    document.getElementById('tdLunar').innerText = `${lun.ld}/${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''} Âm lịch`;
+    document.getElementById('tdLunar').innerText = `${lun.ld} / ${lun.lm}${lun.isLeap ? ' (Nhuận)' : ''}`;
     
     const dayCan = CAN[(jd + 3) % 10], dayChi = CHI[(jd + 5) % 12];
     const yearCan = CAN[lun.ly % 10], yearChi = CHI[lun.ly % 12];
@@ -719,7 +719,7 @@ function showUpcomingEvents() {
 function showTietKhiPopup() {
     const content = `
         <div style="font-size:0.85rem">
-            <h4 style="color:var(--success)">🌸 Mùa Xuân (Từ tháng 2)</h4>
+            <h4 style="color:#51aa55;">🌸 Mùa Xuân (Từ tháng 2)</h4>
         <ul>
             <li><b>Lập Xuân:</b> 04/02 - 05/02: Bắt đầu mùa xuân.</li>
             <li><b>Vũ Thủy:</b> 18/02 - 19/02: Mưa ẩm bắt đầu rơi.</li>
@@ -728,7 +728,7 @@ function showTietKhiPopup() {
             <li><b>Thanh Minh:</b> 04/04 - 05/04: Trời trong sáng, tảo mộ.</li>
             <li><b>Cốc Vũ:</b> 20/04 - 21/04: Mưa rào cho ngũ cốc.</li>
         </ul>
-            <h4 style="color:var(--color-tet)">☀️ Mùa Hạ (Từ tháng 5)</h4>
+            <h4 style="color:#00d2ff;">☀️ Mùa Hạ (Từ tháng 5)</h4>
         <ul>
             <li><b>Lập Hạ:</b> 05/05 - 06/05: Bắt đầu mùa hè.</li>
             <li><b>Tiểu Mãn:</b> 21/05 - 22/05: Lũ nhỏ, lúa chín.</li>
@@ -737,7 +737,7 @@ function showTietKhiPopup() {
             <li><b>Tiểu Thử:</b> 07/07 - 08/07: Nóng nhẹ.</li>
             <li><b>Đại Thử:</b> 22/07 - 23/07: Nóng nhất năm.</li>
         </ul>
-            <h4 style="color:var(--color-lunar)">🍂 Mùa Thu (Từ tháng 8)</h4>
+            <h4 style="color:#fbbd19;">🍂 Mùa Thu (Từ tháng 8)</h4>
         <ul>
             <li><b>Lập Thu:</b> 07/08 - 08/08: Bắt đầu mùa thu.</li>
             <li><b>Xử Thử:</b> 23/08 - 24/08: Nóng bức lui dần.</li>
@@ -746,7 +746,7 @@ function showTietKhiPopup() {
             <li><b>Hàn Lộ:</b> 08/10 - 09/10: Sương bắt đầu lạnh.</li>
             <li><b>Sương Giáng:</b> 23/10 - 24/10: Sương đọng hạt trắng.</li>
         </ul>
-            <h4 style="color:var(--secondary)">❄️ Mùa Đông (Từ tháng 11)</h4>
+            <h4 style="color:#99a797;">❄️ Mùa Đông (Từ tháng 11)</h4>
         <ul>
             <li><b>Lập Đông:</b> 07/11 - 08/11: Bắt đầu mùa đông.</li>
             <li><b>Tiểu Tuyết:</b> 22/11 - 23/11: Tuyết rơi nhẹ.</li>
