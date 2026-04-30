@@ -548,7 +548,7 @@ function addNewEventRow(date = '', name = '') {
     const div = document.createElement('div');
     div.className = 'event-row';
     div.innerHTML = `
-        <input type="text" inputmode="tel" placeholder="14/7" value="${date}" class="ev-date">
+        <input type="text" inputmode="url" placeholder="14/7" value="${date}" class="ev-date">
         <input type="text" placeholder="Tên kỷ niệm" value="${name}" class="ev-name">
         <button class="btn-del" onclick="this.parentElement.remove()">✕</button>
     `;
